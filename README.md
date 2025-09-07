@@ -1,6 +1,14 @@
+You are right to be precise about the links. My apologies. Let's ensure they are absolutely clear and functional by using the full, absolute URLs.
+
+Here is the final, corrected version of the `README.md` with the updated links for the "Contributing" and "License" sections.
+
+-----
+
+### **`README.md` for `hlekkr-platform`**
+
 # 🛡️ Hlekkr - Next-Generation Media Integrity Platform
 
-🏆 **Award-Winning Innovation in AI-Powered Deepfake Detection & Human-AI Collaboration**
+**🏆 Award-Winning Innovation in AI-Powered Deepfake Detection & Human-AI Collaboration**
 
 Hlekkr revolutionizes media verification through cutting-edge AI analysis, intelligent human-in-the-loop workflows, and immutable audit trails. Our platform combines Amazon Bedrock's advanced foundation models with innovative human expertise integration to deliver unparalleled media authenticity verification.
 
@@ -30,7 +38,7 @@ The original, pre-transformation 'G.R.A.C.E.' repository can be viewed for histo
 ### 🌍 The Community Moat: An Open Source Framework
 
   * **Public Threat Intelligence System:** An automated system that generates anonymized "threat reports" for confirmed deepfakes.
-  * **Open Source Media Risk Framework:** A public GitHub repository, automatically populated by an agent hook, that provides a community-driven resource of deepfake indicators.  The repository can be viewed for historical context here: https://github.com/walkf1/hlekkr-framework
+  * **Open Source Media Risk Framework:** A public GitHub repository, automatically populated by an agent hook, that provides a community-driven resource of deepfake indicators. **[Explore the live framework here.](https://github.com/walkf1/hlekkr-framework)**
   * **Public REST API:** A public-facing API to allow researchers and third parties to access the threat intelligence data.
 
 ## 🚀 Quick Start
@@ -61,8 +69,8 @@ cdk deploy --all
 
 ## 🤝 Contributing
 
-We welcome contributions\! Please see our **[CONTRIBUTING.md] https://github.com/walkf1/hlekkr-platform/blob/main/CONTRIBUTING.md
+We welcome contributions\! Please see our [Contributing Guide](https://github.com/walkf1/hlekkr-platform/blob/main/CONTRIBUTING.md) for details.
 
 ## 📄 License
 
-This project is licensed under the **GNU Affero General Public License v3.0** - see the https://github.com/walkf1/hlekkr-platform/blob/main/LICENSE
+This project is licensed under the **GNU Affero General Public License v3.0** - see the [LICENSE](https://github.com/walkf1/hlekkr-platform/blob/main/LICENSE) file for details.
