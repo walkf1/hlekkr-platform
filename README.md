@@ -61,7 +61,7 @@ cdk deploy --all
 
 ## 🤝 Contributing
 
-We welcome contributions\! Please see our **[CONTRIBUTING.md](https://www.google.com/search?q=CONTRIBUTING.md)** for details.
+We welcome contributions\! Please see our **[CONTRIBUTING.md](https://github.com/walkf1/hlekkr-platform/blob/main/CONTRIBUTING.md** for details.
 
 ## 📄 License
 
