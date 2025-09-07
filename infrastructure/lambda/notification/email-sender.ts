@@ -39,7 +39,7 @@ const EMAIL_TEMPLATES = {
     template: 'review-required',
   },
   ACCOUNT_CREATED: {
-    subject: 'Welcome to Hlekkr Media Analysis Platform',
+    subject: 'Welcome to GRACE Media Analysis Platform',
     template: 'account-created',
   },
   PASSWORD_RESET: {
@@ -351,7 +351,7 @@ function generateEmailHtml(type: keyof typeof EMAIL_TEMPLATES, data: Record<stri
             <p><a href="${data.resultsUrl}" class="button">View Results</a></p>
           </div>
           <div class="footer">
-            <p>Hlekkr Media Analysis Platform</p>
+            <p>GRACE Media Analysis Platform</p>
           </div>
         </div>
       `;
@@ -370,7 +370,7 @@ function generateEmailHtml(type: keyof typeof EMAIL_TEMPLATES, data: Record<stri
             <p><a href="${data.supportUrl}" class="button">Contact Support</a></p>
           </div>
           <div class="footer">
-            <p>Hlekkr Media Analysis Platform</p>
+            <p>GRACE Media Analysis Platform</p>
           </div>
         </div>
       `;
@@ -389,7 +389,7 @@ function generateEmailHtml(type: keyof typeof EMAIL_TEMPLATES, data: Record<stri
             <p><a href="${data.reviewUrl}" class="button">View Review Queue</a></p>
           </div>
           <div class="footer">
-            <p>Hlekkr Media Analysis Platform</p>
+            <p>GRACE Media Analysis Platform</p>
           </div>
         </div>
       `;
@@ -399,10 +399,10 @@ function generateEmailHtml(type: keyof typeof EMAIL_TEMPLATES, data: Record<stri
         ${baseStyle}
         <div class="container">
           <div class="header">
-            <h1>Welcome to Hlekkr</h1>
+            <h1>Welcome to GRACE</h1>
           </div>
           <div class="content">
-            <p>Welcome to the Hlekkr Media Analysis Platform, ${data.userName || 'User'}!</p>
+            <p>Welcome to the GRACE Media Analysis Platform, ${data.userName || 'User'}!</p>
             <p>Your account has been successfully created. You can now start analyzing media content for authenticity and trustworthiness.</p>
             <p><strong>Getting Started:</strong></p>
             <ul>
@@ -413,7 +413,7 @@ function generateEmailHtml(type: keyof typeof EMAIL_TEMPLATES, data: Record<stri
             <p><a href="${data.dashboardUrl}" class="button">Go to Dashboard</a></p>
           </div>
           <div class="footer">
-            <p>Hlekkr Media Analysis Platform</p>
+            <p>GRACE Media Analysis Platform</p>
           </div>
         </div>
       `;
@@ -426,14 +426,14 @@ function generateEmailHtml(type: keyof typeof EMAIL_TEMPLATES, data: Record<stri
             <h1>Password Reset</h1>
           </div>
           <div class="content">
-            <p>You requested a password reset for your Hlekkr account.</p>
+            <p>You requested a password reset for your GRACE account.</p>
             <p>Use the following code to reset your password: <strong>${data.resetCode}</strong></p>
             <p>This code will expire in 15 minutes.</p>
             <p><a href="${data.resetUrl}" class="button">Reset Password</a></p>
             <p>If you didn't request this reset, please ignore this email.</p>
           </div>
           <div class="footer">
-            <p>Hlekkr Media Analysis Platform</p>
+            <p>GRACE Media Analysis Platform</p>
           </div>
         </div>
       `;
@@ -454,7 +454,7 @@ function generateEmailHtml(type: keyof typeof EMAIL_TEMPLATES, data: Record<stri
             <p><a href="${data.securityUrl}" class="button">Review Security</a></p>
           </div>
           <div class="footer">
-            <p>Hlekkr Media Analysis Platform</p>
+            <p>GRACE Media Analysis Platform</p>
           </div>
         </div>
       `;
@@ -467,11 +467,11 @@ function generateEmailHtml(type: keyof typeof EMAIL_TEMPLATES, data: Record<stri
             <h1>Notification</h1>
           </div>
           <div class="content">
-            <p>You have a new notification from Hlekkr Media Analysis Platform.</p>
+            <p>You have a new notification from GRACE Media Analysis Platform.</p>
             <pre>${JSON.stringify(data, null, 2)}</pre>
           </div>
           <div class="footer">
-            <p>Hlekkr Media Analysis Platform</p>
+            <p>GRACE Media Analysis Platform</p>
           </div>
         </div>
       `;
@@ -485,7 +485,7 @@ function generateEmailText(type: keyof typeof EMAIL_TEMPLATES, data: Record<stri
   switch (type) {
     case 'ANALYSIS_COMPLETE':
       return `
-Hlekkr Media Analysis - Analysis Complete
+GRACE Media Analysis - Analysis Complete
 
 Your media analysis for "${data.mediaFileName}" has been completed successfully.
 
@@ -496,12 +496,12 @@ Metadata Analysis: ${data.metadataIntegrity || 'N/A'}
 
 View Results: ${data.resultsUrl}
 
-Hlekkr Media Analysis Platform
+GRACE Media Analysis Platform
       `;
 
     case 'ANALYSIS_FAILED':
       return `
-Hlekkr Media Analysis - Analysis Failed
+GRACE Media Analysis - Analysis Failed
 
 Unfortunately, the analysis for "${data.mediaFileName}" could not be completed.
 
@@ -511,12 +511,12 @@ Please try uploading the file again or contact support if the issue persists.
 
 Contact Support: ${data.supportUrl}
 
-Hlekkr Media Analysis Platform
+GRACE Media Analysis Platform
       `;
 
     case 'REVIEW_REQUIRED':
       return `
-Hlekkr Media Analysis - Human Review Required
+GRACE Media Analysis - Human Review Required
 
 The analysis for "${data.mediaFileName}" requires human review.
 
@@ -526,12 +526,12 @@ A human moderator will review this content and provide additional insights.
 
 View Review Queue: ${data.reviewUrl}
 
-Hlekkr Media Analysis Platform
+GRACE Media Analysis Platform
       `;
 
     case 'ACCOUNT_CREATED':
       return `
-Welcome to Hlekkr Media Analysis Platform
+Welcome to GRACE Media Analysis Platform
 
 Welcome ${data.userName || 'User'}!
 
@@ -544,14 +544,14 @@ Getting Started:
 
 Go to Dashboard: ${data.dashboardUrl}
 
-Hlekkr Media Analysis Platform
+GRACE Media Analysis Platform
       `;
 
     case 'PASSWORD_RESET':
       return `
-Hlekkr Media Analysis - Password Reset
+GRACE Media Analysis - Password Reset
 
-You requested a password reset for your Hlekkr account.
+You requested a password reset for your GRACE account.
 
 Reset Code: ${data.resetCode}
 
@@ -561,12 +561,12 @@ Reset Password: ${data.resetUrl}
 
 If you didn't request this reset, please ignore this email.
 
-Hlekkr Media Analysis Platform
+GRACE Media Analysis Platform
       `;
 
     case 'SECURITY_ALERT':
       return `
-Hlekkr Media Analysis - Security Alert
+GRACE Media Analysis - Security Alert
 
 Security Alert: ${data.alertType}
 
@@ -579,18 +579,18 @@ If this wasn't you, please secure your account immediately.
 
 Review Security: ${data.securityUrl}
 
-Hlekkr Media Analysis Platform
+GRACE Media Analysis Platform
       `;
 
     default:
       return `
-Hlekkr Media Analysis - Notification
+GRACE Media Analysis - Notification
 
-You have a new notification from Hlekkr Media Analysis Platform.
+You have a new notification from GRACE Media Analysis Platform.
 
 ${JSON.stringify(data, null, 2)}
 
-Hlekkr Media Analysis Platform
+GRACE Media Analysis Platform
       `;
   }
 }

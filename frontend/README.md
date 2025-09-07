@@ -82,7 +82,7 @@ This React frontend provides comprehensive visualization components for Hlekkr's
 
 ```bash
 # Navigate to frontend directory
-cd Hlekkr-1-recovered/frontend
+cd GRACE-1-recovered/frontend
 
 # Install dependencies
 npm install

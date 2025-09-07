@@ -1,10 +1,10 @@
-# Hlekkr-1 to Hlekkr Rebuild Status
+# GRACE-1 to Hlekkr Rebuild Status
 
 ## 🎯 Project Overview
 
-This document tracks the complete rebuild of the Hlekkr-1 codebase that was transformed into Hlekkr - a high-trust audit platform for deepfake detection and media verification.
+This document tracks the complete rebuild of the GRACE-1 codebase that was transformed into Hlekkr - a high-trust audit platform for deepfake detection and media verification.
 
-**Original Project**: Hlekkr (General Research Audit and Computational Evidence)  
+**Original Project**: GRACE (General Research Audit and Computational Evidence)  
 **Transformed Project**: Hlekkr (High-Trust Audit Platform)  
 **Rebuild Date**: January 2025  
 **Status**: ~95% Complete
@@ -189,7 +189,7 @@ npm run test:load
 
 ## 🎉 Success Criteria Met
 
-✅ **Complete Transformation**: Hlekkr successfully transformed to Hlekkr  
+✅ **Complete Transformation**: GRACE successfully transformed to Hlekkr  
 ✅ **Core Functionality**: All deepfake detection features implemented  
 ✅ **Scalable Architecture**: Cloud-native, serverless design  
 ✅ **Security First**: Comprehensive security measures  
@@ -208,6 +208,6 @@ npm run test:load
 
 ---
 
-**The Hlekkr-1 to Hlekkr transformation rebuild is essentially complete and ready for deployment! 🚀**
+**The GRACE-1 to Hlekkr transformation rebuild is essentially complete and ready for deployment! 🚀**
 
 *Last Updated: January 9, 2025*

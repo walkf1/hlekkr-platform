@@ -1,0 +1,32 @@
+{
+  "name": "React Component Generator",
+  "description": "Generates React components with TypeScript, styled-components, tests, and Storybook stories",
+  "version": "1.0.0",
+  "trigger": {
+    "type": "file_created",
+    "patterns": [
+      "frontend/src/components/**/*.tsx",
+      "frontend/src/pages/**/*.tsx"
+    ],
+    "conditions": {
+      "file_size_less_than": 200,
+      "exclude_patterns": ["*.test.tsx", "*.stories.tsx", "index.tsx"]
+    }
+  },
+  "execution": {
+    "type": "agent",
+    "prompt": "Generate a complete React component with modern best practices:\n\n1. **Component Structure**: \n   - Functional component with TypeScript\n   - Proper props interface with JSDoc comments\n   - Default props and prop validation\n   - Forward refs if needed\n\n2. **Styling**: \n   - Styled-components with theme integration\n   - Responsive design patterns\n   - Accessibility considerations (ARIA labels, keyboard navigation)\n   - Dark/light theme support\n\n3. **State Management**: \n   - React hooks (useState, useEffect, useCallback, useMemo)\n   - Custom hooks for complex logic\n   - Context integration if needed\n\n4. **Testing**: \n   - Unit tests with React Testing Library\n   - Accessibility tests\n   - User interaction tests\n   - Snapshot tests for UI consistency\n\n5. **Storybook Stories**: \n   - Default story with basic props\n   - Stories for different states/variants\n   - Interactive controls for props\n   - Documentation with MDX\n\n6. **Performance**: \n   - Memoization where appropriate\n   - Lazy loading for heavy components\n   - Optimized re-renders\n\nAnalyze the file path and name to determine component purpose:\n- `/components/UI/` - Reusable UI components\n- `/components/Forms/` - Form components with validation\n- `/components/Media/` - Media display and interaction\n- `/components/Dashboard/` - Dashboard and analytics components\n- `/pages/` - Page-level components with routing\n\nGenerate production-ready, accessible, and well-tested components.",
+    "context_files": [
+      "frontend/src/theme/*.ts",
+      "frontend/src/types/*.ts",
+      "frontend/src/hooks/*.ts",
+      "frontend/package.json"
+    ]
+  },
+  "settings": {
+    "auto_approve": false,
+    "create_test_file": true,
+    "create_story_file": true,
+    "update_index_exports": true
+  }
+}

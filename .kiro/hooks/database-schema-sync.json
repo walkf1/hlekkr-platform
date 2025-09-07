@@ -1,0 +1,31 @@
+{
+  "name": "Database Schema Synchronizer",
+  "description": "Automatically updates TypeScript interfaces, data access layers, and validation schemas when DynamoDB table definitions change",
+  "version": "1.0.0",
+  "trigger": {
+    "type": "file_modified",
+    "patterns": [
+      "infrastructure/lib/database-stack.ts",
+      "infrastructure/lib/constructs/dynamodb-*.ts"
+    ],
+    "conditions": {
+      "git_diff_contains": ["Table", "AttributeDefinition", "GlobalSecondaryIndex"]
+    }
+  },
+  "execution": {
+    "type": "agent",
+    "prompt": "Synchronize all code that depends on the modified DynamoDB schema:\n\n1. **TypeScript Interfaces**: \n   - Update data model interfaces to match table schema\n   - Add/remove properties based on attribute changes\n   - Update GSI key interfaces\n   - Maintain backward compatibility where possible\n\n2. **Data Access Layer**: \n   - Update CRUD operations to handle schema changes\n   - Modify query and scan operations for new GSIs\n   - Update batch operations and transactions\n   - Add migration logic for existing data\n\n3. **Validation Schemas**: \n   - Update JSON schema validation\n   - Modify input validation functions\n   - Update API request/response validation\n   - Add new field validation rules\n\n4. **Test Data**: \n   - Update test fixtures to match new schema\n   - Modify mock data generators\n   - Update integration test data\n   - Create migration test scenarios\n\n5. **Documentation**: \n   - Update data model documentation\n   - Modify API documentation\n   - Update database design docs\n   - Create migration guides\n\nAnalyze the schema changes to determine:\n- New/removed attributes\n- Index changes (GSI/LSI)\n- Key schema modifications\n- Breaking vs non-breaking changes\n\nGenerate all necessary code updates and migration scripts.",
+    "context_files": [
+      "backend/shared/types/*.ts",
+      "backend/shared/data-access/*.ts",
+      "backend/shared/validation/*.ts",
+      "infrastructure/lib/**/*.ts"
+    ]
+  },
+  "settings": {
+    "auto_approve": false,
+    "create_migration_scripts": true,
+    "update_tests": true,
+    "validate_backward_compatibility": true
+  }
+}

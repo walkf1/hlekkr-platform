@@ -1,0 +1,33 @@
+{
+  "name": "Lambda Function Generator",
+  "description": "Automatically generates boilerplate Lambda functions with proper TypeScript setup, error handling, and AWS SDK configuration",
+  "version": "1.0.0",
+  "trigger": {
+    "type": "file_created",
+    "patterns": [
+      "infrastructure/lambda/**/*.ts",
+      "backend/lambda/**/*.ts"
+    ],
+    "conditions": {
+      "file_size_less_than": 500,
+      "contains_keywords": ["lambda", "handler", "function"]
+    }
+  },
+  "execution": {
+    "type": "agent",
+    "prompt": "Generate a complete Lambda function based on the file name and location. Include:\n\n1. **Function Structure**: Proper TypeScript interfaces, error handling, and response formatting\n2. **AWS SDK Setup**: Initialize required AWS services (DynamoDB, S3, SNS, etc.) based on function purpose\n3. **Environment Variables**: Validate required environment variables with proper error messages\n4. **Logging**: Structured CloudWatch logging with correlation IDs\n5. **Error Handling**: Comprehensive try-catch blocks with proper error responses\n6. **Input Validation**: Validate incoming events and parameters\n7. **Response Format**: Consistent API Gateway response format\n8. **Performance**: Connection reuse and optimization patterns\n\nAnalyze the file path and name to determine the function's purpose:\n- `/upload/` - Media upload handling\n- `/analysis/` - Media analysis processing\n- `/auth/` - Authentication and authorization\n- `/review/` - Human review workflow\n- `/notification/` - Notification and alerting\n- `/api/` - API endpoint handlers\n\nGenerate production-ready code with comprehensive error handling and logging.",
+    "context_files": [
+      "infrastructure/lib/constructs/*.ts",
+      "backend/shared/**/*.ts",
+      "package.json"
+    ]
+  },
+  "settings": {
+    "auto_approve": false,
+    "auto_execute": true,
+    "run_on_save": true,
+    "run_tests": true,
+    "create_test_file": true,
+    "enabled": true
+  }
+}

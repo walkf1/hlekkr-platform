@@ -1,0 +1,29 @@
+{
+  "name": "CloudWatch Dashboard Creator",
+  "description": "Automatically creates CloudWatch dashboards and alarms when new Lambda functions or APIs are deployed",
+  "version": "1.0.0",
+  "trigger": {
+    "type": "deployment_completed",
+    "patterns": [
+      "infrastructure/lib/**/*-stack.ts"
+    ],
+    "conditions": {
+      "deployment_successful": true,
+      "contains_new_resources": ["AWS::Lambda::Function", "AWS::ApiGateway::RestApi"]
+    }
+  },
+  "execution": {
+    "type": "agent",
+    "prompt": "Create comprehensive monitoring setup for newly deployed resources:\n\n1. **CloudWatch Dashboard**: \n   - Lambda function metrics (invocations, errors, duration, throttles)\n   - API Gateway metrics (requests, latency, 4xx/5xx errors)\n   - DynamoDB metrics (read/write capacity, throttles)\n   - Custom business metrics\n\n2. **CloudWatch Alarms**: \n   - Error rate thresholds (>5% error rate)\n   - High latency alerts (>5s response time)\n   - Throttling alerts\n   - Memory utilization warnings\n   - Custom threshold alarms\n\n3. **SNS Notifications**: \n   - Email alerts for critical issues\n   - Slack integration for team notifications\n   - Escalation procedures for unresolved alerts\n\n4. **Log Insights Queries**: \n   - Pre-built queries for common troubleshooting\n   - Error pattern detection\n   - Performance analysis queries\n   - Security event monitoring\n\n5. **Operational Runbooks**: \n   - Troubleshooting guides for common issues\n   - Escalation procedures\n   - Recovery procedures\n\nAnalyze the deployed resources to create appropriate monitoring:\n- Lambda functions: Performance and error monitoring\n- API endpoints: Request/response monitoring\n- Databases: Capacity and performance monitoring\n- Security: Access pattern monitoring\n\nGenerate CDK code to create the monitoring infrastructure.",
+    "context_files": [
+      "infrastructure/lib/**/*.ts",
+      "infrastructure/monitoring/*.ts"
+    ]
+  },
+  "settings": {
+    "auto_approve": false,
+    "deploy_monitoring": true,
+    "create_runbooks": true,
+    "setup_notifications": true
+  }
+}

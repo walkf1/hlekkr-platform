@@ -1,0 +1,61 @@
+{
+  "name": "CDK Auto Deploy to Dev",
+  "description": "Automatically deploys CDK changes to development environment and runs smoke tests",
+  "version": "1.0.0",
+  "trigger": {
+    "type": "file_saved",
+    "patterns": [
+      "infrastructure/lib/**/*.ts",
+      "infrastructure/bin/*.ts"
+    ],
+    "conditions": {
+      "branch": ["main", "develop", "feature/*"],
+      "exclude_patterns": ["*.test.ts", "*.spec.ts"],
+      "git_status": "clean_or_staged"
+    }
+  },
+  "execution": {
+    "type": "shell_commands",
+    "commands": [
+      {
+        "name": "CDK Diff",
+        "command": "cd infrastructure && npm run diff",
+        "timeout": 60,
+        "continue_on_error": false
+      },
+      {
+        "name": "Deploy to Dev",
+        "command": "cd infrastructure && npm run deploy:dev",
+        "timeout": 600,
+        "continue_on_error": false,
+        "confirmation_required": true,
+        "confirmation_message": "Deploy the following changes to development environment?"
+      },
+      {
+        "name": "Run Smoke Tests",
+        "command": "cd infrastructure && npm run test:smoke",
+        "timeout": 120,
+        "continue_on_error": true
+      },
+      {
+        "name": "Update Deployment Status",
+        "command": "echo 'Deployment completed at $(date)' >> .deployment-log",
+        "timeout": 5,
+        "continue_on_error": true
+      }
+    ]
+  },
+  "settings": {
+    "auto_approve": false,
+    "auto_execute": true,
+    "notify_on_completion": true,
+    "notify_on_failure": true,
+    "rollback_on_failure": true,
+    "enabled": true
+  },
+  "notifications": {
+    "success": "✅ CDK deployment to dev environment completed successfully",
+    "failure": "❌ CDK deployment failed. Check logs for details.",
+    "channels": ["console", "notification_center"]
+  }
+}

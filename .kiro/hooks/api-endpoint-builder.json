@@ -1,0 +1,45 @@
+{
+  "name": "API Endpoint Builder",
+  "description": "Automatically generates Lambda handlers, validation schemas, and documentation when API Gateway configurations are modified",
+  "version": "1.0.0",
+  "trigger": {
+    "type": "file_change",
+    "patterns": [
+      "infrastructure/lib/*api*.ts",
+      "infrastructure/lib/**/*api*.ts",
+      "infrastructure/lib/*stack*.ts"
+    ],
+    "conditions": [
+      {
+        "type": "content_contains",
+        "patterns": [
+          "addMethod",
+          "RestApi",
+          "HttpApi",
+          "LambdaIntegration"
+        ]
+      }
+    ]
+  },
+  "actions": [
+    {
+      "type": "agent_execution",
+      "prompt": "Analyze the modified API Gateway configuration and generate corresponding Lambda handlers, validation schemas, and documentation. Focus on new or modified API endpoints.",
+      "context": {
+        "includeFiles": [
+          "infrastructure/lib/*.ts",
+          "infrastructure/lambda/**/*.ts"
+        ],
+        "maxTokens": 8000
+      }
+    }
+  ],
+  "settings": {
+    "autoApprove": false,
+    "autoExecute": true,
+    "runOnSave": true,
+    "debounceMs": 2000,
+    "maxExecutions": 5,
+    "enabled": true
+  }
+}

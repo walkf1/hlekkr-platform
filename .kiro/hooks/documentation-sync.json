@@ -1,0 +1,34 @@
+{
+  "name": "Documentation Synchronizer",
+  "description": "Automatically updates documentation when API endpoints, Lambda functions, or database schemas change",
+  "version": "1.0.0",
+  "trigger": {
+    "type": "file_modified",
+    "patterns": [
+      "infrastructure/lambda/**/*.ts",
+      "infrastructure/lib/api-gateway-stack.ts",
+      "infrastructure/lib/database-stack.ts",
+      "backend/lambda/**/*.ts"
+    ],
+    "conditions": {
+      "exclude_patterns": ["*.test.ts", "*.spec.ts"],
+      "git_diff_contains": ["export", "function", "interface", "Table", "addResource"]
+    }
+  },
+  "execution": {
+    "type": "agent",
+    "prompt": "Update all relevant documentation based on code changes:\n\n1. **API Documentation**: \n   - Update OpenAPI/Swagger specifications\n   - Generate endpoint documentation with examples\n   - Update request/response schemas\n   - Add authentication requirements\n   - Include error response documentation\n\n2. **Architecture Documentation**: \n   - Update system architecture diagrams\n   - Modify data flow diagrams\n   - Update component interaction diagrams\n   - Refresh deployment architecture\n\n3. **Developer Guides**: \n   - Update setup and installation guides\n   - Modify development workflow documentation\n   - Update testing procedures\n   - Refresh deployment guides\n\n4. **User Documentation**: \n   - Update user guides and tutorials\n   - Modify feature documentation\n   - Update FAQ sections\n   - Refresh troubleshooting guides\n\n5. **README Files**: \n   - Update project README with new features\n   - Modify component-specific READMEs\n   - Update installation and usage instructions\n   - Refresh contribution guidelines\n\n6. **Code Comments**: \n   - Update JSDoc comments for functions\n   - Modify inline code documentation\n   - Update type definitions documentation\n   - Refresh example code snippets\n\nAnalyze the changes to determine documentation impact:\n- New/modified API endpoints\n- Changed function signatures\n- Updated data models\n- New features or capabilities\n- Breaking changes requiring migration\n\nGenerate comprehensive, up-to-date documentation.",
+    "context_files": [
+      "docs/**/*.md",
+      "README.md",
+      "api-docs/**/*.yaml",
+      "infrastructure/lib/**/*.ts"
+    ]
+  },
+  "settings": {
+    "auto_approve": false,
+    "generate_api_docs": true,
+    "update_diagrams": true,
+    "validate_links": true
+  }
+}

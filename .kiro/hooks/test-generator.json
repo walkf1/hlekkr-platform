@@ -1,0 +1,33 @@
+{
+  "name": "Comprehensive Test Generator",
+  "description": "Automatically generates unit tests, integration tests, and test fixtures for new Lambda functions and API endpoints",
+  "version": "1.0.0",
+  "trigger": {
+    "type": "file_created",
+    "patterns": [
+      "infrastructure/lambda/**/*.ts",
+      "backend/lambda/**/*.ts",
+      "backend/services/**/*.ts"
+    ],
+    "conditions": {
+      "exclude_patterns": ["*.test.ts", "*.spec.ts"],
+      "file_contains": ["export", "function", "class"]
+    }
+  },
+  "execution": {
+    "type": "agent",
+    "prompt": "Generate comprehensive test suite for the created file:\n\n1. **Unit Tests**: Test individual functions with mocked dependencies\n   - Happy path scenarios\n   - Error conditions and edge cases\n   - Input validation tests\n   - Mock AWS services (DynamoDB, S3, SNS, etc.)\n\n2. **Integration Tests**: Test complete workflows\n   - End-to-end API testing\n   - Database integration tests\n   - AWS service integration tests\n   - Error propagation tests\n\n3. **Test Fixtures**: Create reusable test data\n   - Sample media files and metadata\n   - Mock API responses\n   - Test user accounts and permissions\n   - Database seed data\n\n4. **Performance Tests**: Basic performance validation\n   - Response time assertions\n   - Memory usage checks\n   - Concurrent request handling\n\n5. **Security Tests**: Validate security measures\n   - Authentication tests\n   - Authorization boundary tests\n   - Input sanitization tests\n\nAnalyze the source file to determine:\n- Function signatures and return types\n- Dependencies and AWS services used\n- Error conditions to test\n- Business logic to validate\n\nGenerate tests using Jest and AWS SDK mocks with proper setup/teardown.",
+    "context_files": [
+      "package.json",
+      "jest.config.js",
+      "backend/shared/**/*.ts",
+      "infrastructure/lib/**/*.ts"
+    ]
+  },
+  "settings": {
+    "auto_approve": false,
+    "run_tests_after_generation": true,
+    "create_test_fixtures": true,
+    "update_test_config": true
+  }
+}
