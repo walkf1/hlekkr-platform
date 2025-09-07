@@ -1,0 +1,6 @@
+boto3>=1.26.0
+botocore>=1.29.0
+Pillow>=9.0.0  # For image metadata
+ffmpeg-python>=0.2.0  # For video metadata
+mutagen>=1.45.0  # For audio metadata
+exifread>=2.3.0  # For EXIF data extraction

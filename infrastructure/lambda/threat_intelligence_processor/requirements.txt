@@ -1,0 +1,39 @@
+# AWS SDK and core dependencies
+boto3>=1.26.0
+botocore>=1.29.0
+
+# Data processing and analysis
+statistics  # Built-in module
+hashlib     # Built-in module
+
+# Date/time handling
+python-dateutil>=2.8.0
+
+# JSON handling and validation
+jsonschema>=4.0.0
+
+# Type hints and validation
+typing-extensions>=4.0.0
+pydantic>=1.10.0
+
+# Logging and monitoring
+structlog>=22.0.0
+
+# Regular expressions
+re  # Built-in module
+
+# UUID generation
+uuid  # Built-in module
+
+# Decimal handling for DynamoDB
+decimal  # Built-in module
+
+# Enum support
+enum  # Built-in module
+
+# Dataclasses
+dataclasses  # Built-in module (Python 3.7+)
+
+# Testing dependencies (for development)
+pytest>=7.0.0
+moto>=4.0.0

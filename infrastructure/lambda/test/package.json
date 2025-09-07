@@ -1,0 +1,17 @@
+{
+  "name": "hlekkr-lambda-tests",
+  "version": "1.0.0",
+  "description": "Unit tests for Hlekkr Lambda functions",
+  "scripts": {
+    "test": "vitest",
+    "test:run": "vitest run",
+    "test:coverage": "vitest run --coverage"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.130",
+    "@types/node": "^20.10.5",
+    "@vitest/coverage-v8": "^1.1.0",
+    "typescript": "^5.3.3",
+    "vitest": "^1.1.0"
+  }
+}

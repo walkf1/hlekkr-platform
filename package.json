@@ -1,0 +1,38 @@
+{
+  "name": "hlekkr-media-analysis",
+  "version": "1.0.0",
+  "description": "Hlekkr - Advanced Media Analysis and Deepfake Detection Platform",
+  "main": "index.js",
+  "scripts": {
+    "build": "npm run build --workspaces",
+    "test": "npm run test --workspaces",
+    "diff": "cd infrastructure && cdk diff",
+    "deploy:dev": "cd infrastructure && cdk deploy --profile hlekkr-dev",
+    "deploy:prod": "cd infrastructure && cdk deploy --profile hlekkr-prod",
+    "test:smoke": "npm run test -- --testNamePattern='smoke'",
+    "lint": "eslint . --ext .ts,.tsx",
+    "format": "prettier --write ."
+  },
+  "workspaces": [
+    "infrastructure",
+    "frontend",
+    "backend"
+  ],
+  "keywords": [
+    "media-analysis",
+    "deepfake-detection",
+    "aws",
+    "cdk",
+    "typescript"
+  ],
+  "author": "Hlekkr Team",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.0.0",
+    "prettier": "^3.0.0",
+    "typescript": "^5.0.0"
+  }
+}
