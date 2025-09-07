@@ -65,4 +65,4 @@ We welcome contributions\! Please see our **[CONTRIBUTING.md] https://github.com
 
 ## 📄 License
 
-This project is licensed under the **GNU Affero General Public License v3.0** - see the **[LICENSE](https://www.google.com/search?q=LICENSE)** file for details.
+This project is licensed under the **GNU Affero General Public License v3.0** - see the https://github.com/walkf1/hlekkr-platform/blob/main/LICENSE
