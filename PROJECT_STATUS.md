@@ -2,7 +2,7 @@
 
 ## 🎯 Project Overview
 
-This document tracks the complete rebuild of the GRACE codebase that was transformed into Hlekkr - a high-trust audit platform for deepfake detection and media verification.
+This document tracks the complete rebuild of the GRACE codebase that was transformed into Hlekkr, a high-trust audit platform for deepfake detection and media verification.
 
 **Original Project**: GRACE (General Research Audit and Computational Evidence)  
 **Transformed Project**: Hlekkr (High-Trust Audit Platform)  
