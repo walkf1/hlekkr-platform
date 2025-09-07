@@ -31,43 +31,29 @@ The original, pre-transformation 'G.R.A.C.E.' repository can be viewed for histo
 
 In an era of sophisticated media manipulation, Hlekkr provides the tools and infrastructure needed to verify media authenticity, detect deepfakes, and maintain trust in digital content. Built on proven immutable audit trail technology, Hlekkr combines cutting-edge AI with robust verification mechanisms.
 
-## ✨ Core Features
+## ✨ Key Features & Capabilities
+🤖 The Trust Engine: From Black Box to Verifiable Insight
+AI-Powered Deepfake Detection: Integration with Amazon Bedrock for multi-factor analysis of visual media.
 
-### 🔍 AI-Powered Deepfake Detection
-- **Amazon Bedrock Integration**: Leverage state-of-the-art foundation models for deepfake detection
-- **Multi-Modal Analysis**: Support for video, image, and audio deepfake detection
-- **Confidence Scoring**: Detailed confidence metrics with technique identification
-- **Real-Time Processing**: Fast analysis with scalable processing pipeline
+Trust Score Calculation Engine: A proprietary, weighted algorithm that synthesizes multiple components into a single, human-readable A+ to F grade.
 
-### 🛡️ Trust Score System
-- **Composite Scoring**: Multi-factor trust assessment combining deepfake analysis, source verification, and metadata consistency
-- **Historical Patterns**: Behavioral analysis and pattern recognition
-- **Color-Coded Ratings**: Intuitive green/yellow/red trust indicators
-- **Detailed Breakdowns**: Transparent scoring methodology with factor explanations
+Immutable Audit Trail: Use of S3 Object Lock to ensure all analysis and decision records are tamper-proof and verifiable.
 
-### 📋 Immutable Audit Trail
-- **Cryptographic Integrity**: SHA-256 hashing with chain verification
-- **Complete Provenance**: Full chain of custody tracking from upload to analysis
-- **Tamper-Proof Records**: Immutable ledger ensuring data integrity
-- **Audit Verification**: Built-in tools to verify audit chain integrity
+Source Verification: Captures and verifies original source information, assessing source reliability over time.
 
-### 🔗 Source Verification
-- **Origin Tracking**: Capture and verify original source information
-- **External Validation**: Integration with third-party verification services
-- **Reputation Scoring**: Source reliability assessment and tracking
-- **Discrepancy Detection**: Automated alerts for suspicious patterns
+🤝 Human-AI Collaboration & Governance
+Intelligent Moderator Assignment: A sophisticated backend system that assigns reviews to human moderators based on a weighted score of their skills and workload.
 
-### 📊 Real-Time Monitoring
-- **Live Dashboards**: Real-time analysis and threat detection monitoring
-- **Automated Alerts**: Proactive notifications for high-risk content
-- **Performance Metrics**: System health and processing statistics
-- **Scalable Architecture**: Auto-scaling based on demand
+Production-Ready Moderator Dashboard: A comprehensive, responsive React UI with Cognito authentication and role-based access controls.
 
-### 🔌 API Integration
-- **RESTful APIs**: Comprehensive API for third-party integrations
-- **Webhook Support**: Real-time notifications and event streaming
-- **Batch Processing**: Efficient bulk analysis capabilities
-- **SDK Support**: Client libraries for popular programming languages
+Forensic Media Review Interface: An enterprise-grade interface with interactive canvas overlays and comparison tools to support informed decision-making.
+
+🌍 The Community Moat: An Open Source Framework
+Public Threat Intelligence System: An automated system that generates anonymized, PII-sanitized "threat reports" for confirmed deepfakes.
+
+Open Source Media Risk Framework: A public GitHub repository, automatically populated by an agent hook, that provides a community-driven resource of deepfake indicators, creating network effects.
+
+Public REST API: A public-facing API to allow researchers and third parties to access the threat intelligence data.
 
 ## 🏗️ Architecture
 
