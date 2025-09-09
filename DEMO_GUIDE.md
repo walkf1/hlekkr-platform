@@ -43,15 +43,6 @@ npm install && npm start
 
 ## 🚀 Advanced Testing
 
-### **API Endpoints (Example)**
-```bash
-# Test status endpoint (replace with your deployed URL)
-curl "https://your-api-gateway-url.amazonaws.com/prod/media/test-123/status"
-
-# Test trust scores
-curl "https://your-api-gateway-url.amazonaws.com/prod/trust-scores"
-```
-
 ### **Demo vs Production**
 - **Demo Mode**: Full functionality, no AWS costs, realistic simulation
 - **Production Mode**: Real Bedrock AI, requires API key, incurs costs
