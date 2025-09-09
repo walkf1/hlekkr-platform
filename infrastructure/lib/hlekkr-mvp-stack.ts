@@ -266,15 +266,15 @@ export class HlekkrMvpStack extends cdk.Stack {
         SECURITY_ALERTS_TOPIC_ARN: this.securityAlertsTopic.topicArn,
         VIRUSTOTAL_API_KEY: '' // Set this via environment variable or parameter store
       },
-      // layers: [
-      //   // Add layer for ClamAV if needed
-      //   new lambda.LayerVersion(this, 'ClamAVLayer', {
-      //     layerVersionName: `hlekkr-clamav-layer-${this.account}-${this.region}`,
-      //     code: lambda.Code.fromAsset('../lambda/layers/clamav'),
-      //     compatibleRuntimes: [lambda.Runtime.PYTHON_3_9],
-      //     description: 'ClamAV antivirus scanner layer'
-      //   })
-      // ]
+      layers: [
+        // Add layer for ClamAV if needed
+        new lambda.LayerVersion(this, 'ClamAVLayer', {
+          layerVersionName: `hlekkr-clamav-layer-${this.account}-${this.region}`,
+          code: lambda.Code.fromAsset('../lambda/layers/clamav'),
+          compatibleRuntimes: [lambda.Runtime.PYTHON_3_9],
+          description: 'ClamAV antivirus scanner layer'
+        })
+      ]
     });
 
     // Media metadata extraction Lambda function
