@@ -1,74 +1,77 @@
-🛡️ Hlekkr - Next-Generation Media Integrity Platform
+Of course. You are absolutely right to insist on this restructure. A `README` must immediately communicate the value of the project.
 
+Here is the full, re-structured `README.md` for the `hlekkr-platform` repository. It now leads with the most compelling information, telling a clear "hook, story, details" narrative for any visitor, especially the hackathon judges.
 
+-----
+
+# 🛡️ Hlekkr - Next-Generation Media Integrity Platform
+
+**🏆 Hackathon & Research Project - Open Source Media Verification**
 
 Hlekkr revolutionizes media verification through cutting-edge AI analysis, intelligent human-in-the-loop workflows, and immutable audit trails. Our platform combines Amazon Bedrock's advanced foundation models with innovative human expertise integration to deliver unparalleled media authenticity verification.
 
-🎯 Project Status & Access Modes
-Demo Mode (Default)
-✅ Free to use - No AWS costs incurred
+## ✨ Key Features & Capabilities
 
-✅ Full UI experience - All dashboard sections are functional
+### 🤖 The Trust Engine: From Black Box to Verifiable Insight
 
-✅ Simulated AI analysis - Provides realistic deepfake detection results without live API calls
+  * **AI-Powered Deepfake Detection:** Production Bedrock integration with Claude 3 Sonnet/Haiku ensemble analysis.
+  * **Trust Score Calculation Engine:** Multi-factor weighted algorithm with 0-100 scoring and risk classification.
+  * **Immutable Audit Trail:** DynamoDB with TTL and S3 storage for tamper-proof verification.
+  * **Source Verification:** Domain reputation scoring and reliability assessment system.
 
-✅ Judge evaluation ready - Allows for complete feature demonstration
+### 🤝 Human-AI Collaboration & Governance
 
-Production Mode (API Key Required)
-🔑 Requires API key - Contact team for access
+  * **Intelligent Moderator Assignment:** 100-point algorithm with skill-based routing and workload balancing.
+  * **Forensic Media Review Interface:** Backend complete, frontend UI in development.
+  * **Advanced QA Workflow:** Complete review lifecycle management with peer review system.
 
-💰 AWS costs apply - Live Bedrock API usage will be charged to your account
+### 🌍 The Community Moat: An Open Source Framework
 
-🚨 Billing alarms set - The CDK stack includes $50/$100/$200 cost protection alarms
+  * **Threat Intelligence System:** Automated report generation with sanitized public sharing.
+  * **GitHub Framework Integration:** Live publishing to the **[hlekkr-framework](https://github.com/walkf1/hlekkr-framework)**.
+  * **Public REST API:** Architecture ready, endpoints in development.
 
-🔬 Real AI analysis - Uses a live ensemble of Bedrock models
+## About This Repository (Kiro Hackathon Submission)
 
-About This Repository (Kiro Hackathon Submission)
-This repository contains the source code for the "Hlekkr" platform, submitted for the 2025 Code with Kiro Hackathon.
+This repository contains the source code for the "Hlekkr" platform, submitted for the 2025 Code with Kiro Hackathon and national grant competition.
 
-The project's narrative involved the complete, spec-driven transformation of a legacy project called 'G.R.A.C.E.' into the modern Hlekkr platform, using Kiro as an AI development partner. This repository represents the final, A-grade MVP that was produced through this agentic workflow.
+The project represents a complete transformation from the legacy 'G.R.A.C.E.' project into the modern Hlekkr platform. The original repository can be viewed for historical context here: `https://github.com/walkf1/GRACE`.
 
-The original, pre-transformation 'G.R.A.C.E.' repository can be viewed for historical context here: https://github.com/walkf1/GRACE
+## 🎯 Project Status & Access Modes
 
-✨ Key Features & Capabilities
-🤖 The Trust Engine: From Black Box to Verifiable Insight
-Bedrock Integration: Leverages an ensemble of state-of-the-art foundation models, including Claude 3 Sonnet, Claude 3 Haiku, and Amazon Titan, for deepfake detection.
+### **Demo Mode (Default)**
 
-Trust Score Calculation Engine: A proprietary, weighted algorithm that synthesizes multiple components into a single, human-readable A+ to F grade.
+  * ✅ **Free to use** - No AWS costs incurred
+  * ✅ **Full UI experience** - All 4 dashboard sections functional
+  * ✅ **Simulated AI analysis** - Realistic deepfake detection results
+  * ✅ **Judge evaluation ready** - Complete feature demonstration
 
-Immutable Audit Trail: Use of S3 Object Lock to ensure all analysis and decision records are tamper-proof and verifiable.
+### **Production Mode (API Key Required)**
 
-🤝 Human-AI Collaboration & Governance
-Intelligent Moderator Assignment: A sophisticated backend system that assigns reviews to human moderators based on their skills and workload.
+  * 🔑 **Requires API key** - Contact team for access
+  * 💰 **AWS costs apply** - Bedrock API usage charges
+  * 🚨 **Billing alarms set** - $50/$100/$200 cost protection
+  * 🔬 **Real AI analysis** - Live Bedrock Claude 3 Sonnet/Haiku
 
-Forensic Media Review Interface: 🔄 An enterprise-grade UI with interactive overlays and comparison tools to support informed decision-making (in development).
+## ⚠️ Cost Warning & Deployment
 
-Advanced QA Workflow: A complete interface for moderators to make and justify decisions, featuring an integrated peer review system.
+**IMPORTANT**: Deploying this platform to AWS will incur costs, particularly for Amazon Bedrock, Lambda, S3, and DynamoDB. For evaluation, please use the default **Demo Mode** which incurs no AWS costs.
 
-🌍 The Community Moat: An Open Source Framework
-Public Threat Intelligence System: An automated system that generates anonymized "threat reports" for confirmed deepfakes.
+## 🚀 Quick Start
 
-Open Source Media Risk Framework: A public GitHub repository, automatically populated by an agent hook, that provides a community-driven resource of deepfake indicators. Explore the live framework here.
+**🎯 For Kiro Hackathon Judges**: See **[DEMO\_GUIDE.md](https://www.google.com/search?q=https://github.com/walkf1/hlekkr-platform/blob/main/DEMO_GUIDE.md)** for complete evaluation instructions.
 
-Public REST API: A public-facing API to allow researchers and third parties to access the threat intelligence data.
+**Prerequisites**
 
-⚠️ IMPORTANT: Deploying this platform to your own AWS account will incur costs. Please see the "Quick Start" section for details on running in the free, zero-cost Demo Mode.
+  * AWS CLI configured with appropriate permissions
+  * Node.js 18+ and npm
+  * AWS CDK 2.70.0+
+  * Python 3.9+ (for Lambda functions)
+  * **Enable Billing Alerts:** Before deploying, you must enable IAM access to your billing data in your AWS account's billing preferences. This is required for the CDK to create the cost protection alarms.
 
-🚀 Quick Start
-Prerequisites
-AWS CLI configured with appropriate permissions
+**Demo Mode (Recommended for Evaluation)**
 
-Node.js 18+ and npm
-
-AWS CDK 2.70.0+
-
-Python 3.9+ (for Lambda functions)
-
-Enable Billing Alerts: Before deploying in Production Mode, you must enable IAM access to your billing data. In your AWS account, navigate to the Billing console, select 'Billing preferences', and enable 'IAM User and Role Access to Billing Information'. This is required for the CDK to create the cost protection alarms.
-
-Demo Mode (Recommended for Evaluation)
-Bash
-
+```bash
 # Clone the repository
 git clone https://github.com/walkf1/hlekkr-platform.git
 cd hlekkr-platform
@@ -76,9 +79,11 @@ cd hlekkr-platform
 # Start frontend demo (no AWS deployment needed)
 cd frontend && npm install && npm start
 # Visit http://localhost:3000
-Production Deployment (⚠️ Incurs AWS Costs)
-Bash
+```
 
+**Production Deployment (⚠️ Incurs AWS Costs)**
+
+```bash
 # Set environment variables
 export DEMO_MODE=false
 export HLEKKR_API_KEY=your-secure-api-key
@@ -89,8 +94,12 @@ cd infrastructure
 npm install && npm run build
 cdk bootstrap  # First time only
 cdk deploy --all
-🤝 Contributing
-We welcome contributions! Please see our Contributing Guide for details.
+```
 
-📄 License
-This project is licensed under the GNU Affero General Public License v3.0 (AGPL-3.0) - see the LICENSE file for details.
+## 🤝 Contributing
+
+We welcome contributions\! Please see our **[Contributing Guide](https://github.com/walkf1/hlekkr-platform/blob/main/CONTRIBUTING.md)** for details.
+
+## 📄 License
+
+This project is licensed under the **GNU Affero General Public License v3.0** (AGPL-3.0) - see the **[LICENSE](https://github.com/walkf1/hlekkr-platform/blob/main/LICENSE)** file for details.
