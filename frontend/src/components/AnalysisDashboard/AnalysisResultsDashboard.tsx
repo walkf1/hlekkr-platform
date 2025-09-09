@@ -164,59 +164,62 @@ export const AnalysisResultsDashboard: React.FC<AnalysisResultsDashboardProps> =
     sortOrder: 'desc'
   });
 
-  // Mock data for demonstration
-  const mockResults: MediaAnalysisResult[] = [
-    {
-      mediaId: 'media-001',
-      fileName: 'suspicious_video.mp4',
-      fileType: 'video/mp4',
-      fileSize: 15728640,
-      uploadedAt: '2024-01-15T10:30:00Z',
-      analyzedAt: '2024-01-15T10:32:15Z',
-      trustScore: 23.5,
-      status: 'under_review',
-      deepfakeAnalysis: {
-        probability: 0.87,
-        confidence: 0.92,
-        techniques: ['face_swap', 'voice_cloning'],
-        modelVersion: 'v2.1.0'
-      },
-      sourceVerification: {
-        status: 'suspicious',
-        reputationScore: 15.2,
-        domain: 'fake-news-site.com',
-        verificationDetails: {}
-      },
-      metadataAnalysis: {
-        consistent: false,
-        anomalies: ['timestamp_mismatch', 'location_inconsistency'],
-        extractedData: {},
-        originalMetadata: {}
-      },
-      humanReview: {
-        reviewId: 'review-001',
-        status: 'in_progress',
-        assignedModerator: 'moderator_jane',
-        processingTime: 1800
-      },
-      threatIntelligence: {
-        indicators: 5,
-        reportGenerated: true,
-        severity: 'high'
-      }
-    },
-    // Add more mock data...
-  ];
+  // Calculate stats from actual results data
+  const calculateStats = (data: MediaAnalysisResult[]) => {
+    if (data.length === 0) {
+      return {
+        totalMedia: 0,
+        analyzedToday: 0,
+        averageTrustScore: 0,
+        flaggedContent: 0,
+        underReview: 0,
+        completedReviews: 0,
+        processingTime: 0,
+        threatReports: 0
+      };
+    }
 
-  const stats = {
-    totalMedia: 1247,
-    analyzedToday: 89,
-    averageTrustScore: 76.3,
-    flaggedContent: 23,
-    underReview: 12,
-    completedReviews: 156,
-    processingTime: 45.2,
-    threatReports: 8
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    const analyzedToday = data.filter(item => {
+      const analyzedDate = new Date(item.analyzedAt);
+      analyzedDate.setHours(0, 0, 0, 0);
+      return analyzedDate.getTime() === today.getTime();
+    }).length;
+
+    const totalTrustScore = data.reduce((sum, item) => sum + item.trustScore, 0);
+    const averageTrustScore = totalTrustScore / data.length;
+    
+    const flaggedContent = data.filter(item => item.status === 'flagged' || item.trustScore < 40).length;
+    const underReview = data.filter(item => item.status === 'under_review' || item.humanReview?.status === 'pending' || item.humanReview?.status === 'in_progress').length;
+    
+    const completedReviews = data.filter(item => {
+      if (!item.humanReview) return false;
+      const reviewDate = new Date(item.humanReview.reviewedAt || '');
+      reviewDate.setHours(0, 0, 0, 0);
+      return item.humanReview.status === 'completed' && reviewDate.getTime() === today.getTime();
+    }).length;
+
+    const processingTimes = data
+      .filter(item => item.humanReview?.processingTime)
+      .map(item => item.humanReview!.processingTime!);
+    const avgProcessingTime = processingTimes.length > 0 
+      ? processingTimes.reduce((sum, time) => sum + time, 0) / processingTimes.length 
+      : 0;
+
+    const threatReports = data.filter(item => item.threatIntelligence?.reportGenerated).length;
+
+    return {
+      totalMedia: data.length,
+      analyzedToday,
+      averageTrustScore: Math.round(averageTrustScore * 10) / 10,
+      flaggedContent,
+      underReview,
+      completedReviews,
+      processingTime: Math.round(avgProcessingTime * 10) / 10,
+      threatReports
+    };
   };
 
   // Load data
@@ -224,8 +227,8 @@ export const AnalysisResultsDashboard: React.FC<AnalysisResultsDashboardProps> =
     const loadData = async () => {
       setLoading(true);
       try {
-        // Use prop results if provided, otherwise use mock data
-        const dataToUse = propResults && propResults.length > 0 ? propResults : mockResults;
+        // Use prop results if provided, otherwise empty array
+        const dataToUse = propResults || [];
         setResults(dataToUse);
         setFilteredResults(dataToUse);
       } catch (err) {
@@ -368,7 +371,7 @@ export const AnalysisResultsDashboard: React.FC<AnalysisResultsDashboardProps> =
         </HeaderActions>
       </Header>
 
-      <DashboardStats stats={stats} />
+      <DashboardStats stats={calculateStats(results)} />
 
       <DashboardFiltersComponent
         filters={filters}
