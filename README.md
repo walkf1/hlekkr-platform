@@ -29,7 +29,7 @@ Hlekkr revolutionizes media verification through cutting-edge AI analysis, intel
 
 ## About This Repository (Kiro Hackathon Submission)
 
-This repository contains the source code for the "Hlekkr" platform, submitted for the 2025 Code with Kiro Hackathon and national grant competition.
+This repository contains the source code for the "Hlekkr" platform, submitted for the 2025 Code with Kiro Hackathon.
 
 The project represents a complete transformation from the legacy 'G.R.A.C.E.' project into the modern Hlekkr platform. The original repository can be viewed for historical context here: `https://github.com/walkf1/GRACE`.
 
