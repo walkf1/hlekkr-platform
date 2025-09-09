@@ -1,6 +1,31 @@
 const { S3Client, CreateMultipartUploadCommand, PutObjectCommand, UploadPartCommand, CompleteMultipartUploadCommand, AbortMultipartUploadCommand } = require('@aws-sdk/client-s3');
 const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
-const { InputValidator } = require('./shared/input-validator');
+// const { InputValidator } = require('./shared/input-validator');
+
+// Inline validation for demo
+function validateFileName(fileName) {
+  if (!fileName || typeof fileName !== 'string') {
+    throw new Error('Invalid fileName: must be non-empty string');
+  }
+  if (fileName.includes('..') || fileName.includes('/') || fileName.includes('\\')) {
+    throw new Error('Invalid fileName: path traversal detected');
+  }
+  if (fileName.length > 255 || !/^[a-zA-Z0-9._\s-]+$/.test(fileName)) {
+    throw new Error('Invalid fileName: invalid characters or too long');
+  }
+  return fileName.trim();
+}
+
+function validateFileType(fileType) {
+  const allowedTypes = [
+    'image/jpeg', 'image/png', 'image/gif', 'image/webp',
+    'video/mp4', 'video/avi', 'video/mov', 'video/webm'
+  ];
+  if (!allowedTypes.includes(fileType)) {
+    throw new Error(`Invalid fileType: ${fileType} not allowed`);
+  }
+  return fileType;
+}
 
 const s3Client = new S3Client({ 
   region: process.env.AWS_REGION,
@@ -178,8 +203,8 @@ exports.handler = async (event) => {
       }
       
       try {
-        InputValidator.validateFileName(fileName);
-        InputValidator.validateFileType(fileType);
+        validateFileName(fileName);
+        validateFileType(fileType);
       } catch (error) {
         return {
           statusCode: 400,
