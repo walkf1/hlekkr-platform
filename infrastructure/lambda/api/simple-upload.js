@@ -1,4 +1,4 @@
-const { S3Client, CreateMultipartUploadCommand, PutObjectCommand } = require('@aws-sdk/client-s3');
+const { S3Client, CreateMultipartUploadCommand, PutObjectCommand, UploadPartCommand, CompleteMultipartUploadCommand, AbortMultipartUploadCommand } = require('@aws-sdk/client-s3');
 const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
 
 const s3Client = new S3Client({ region: process.env.AWS_REGION });
@@ -59,6 +59,91 @@ exports.handler = async (event) => {
           uploadId: multipartResult.UploadId,
           key: s3Key
         })
+      };
+    }
+
+    // Handle multipart URLs
+    if (path.includes('/multipart/urls')) {
+      const { uploadId, key, partNumbers } = body;
+      if (!uploadId || !key || !partNumbers) {
+        return {
+          statusCode: 400,
+          headers,
+          body: JSON.stringify({ error: 'uploadId, key, and partNumbers required' })
+        };
+      }
+
+      const urls = {};
+      for (const partNumber of partNumbers) {
+        const uploadPartCommand = new UploadPartCommand({
+          Bucket: MEDIA_BUCKET,
+          Key: key,
+          PartNumber: partNumber,
+          UploadId: uploadId
+        });
+        urls[partNumber] = await getSignedUrl(s3Client, uploadPartCommand, { expiresIn: 3600 });
+      }
+
+      return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify({ urls })
+      };
+    }
+
+    // Handle multipart complete
+    if (path.includes('/multipart/complete')) {
+      const { uploadId, key, parts } = body;
+      if (!uploadId || !key || !parts) {
+        return {
+          statusCode: 400,
+          headers,
+          body: JSON.stringify({ error: 'uploadId, key, and parts required' })
+        };
+      }
+
+      const completeCommand = new CompleteMultipartUploadCommand({
+        Bucket: MEDIA_BUCKET,
+        Key: key,
+        UploadId: uploadId,
+        MultipartUpload: { Parts: parts }
+      });
+
+      const result = await s3Client.send(completeCommand);
+      
+      return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify({
+          location: result.Location,
+          mediaId: key.split('/')[1]
+        })
+      };
+    }
+
+    // Handle multipart abort
+    if (path.includes('/multipart/abort')) {
+      const { uploadId, key } = body;
+      if (!uploadId || !key) {
+        return {
+          statusCode: 400,
+          headers,
+          body: JSON.stringify({ error: 'uploadId and key required' })
+        };
+      }
+
+      const abortCommand = new AbortMultipartUploadCommand({
+        Bucket: MEDIA_BUCKET,
+        Key: key,
+        UploadId: uploadId
+      });
+
+      await s3Client.send(abortCommand);
+      
+      return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify({ success: true })
       };
     }
 

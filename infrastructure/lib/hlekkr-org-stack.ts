@@ -122,6 +122,9 @@ export class HlekkrOrgStack extends cdk.Stack {
     
     const completeResource = multipartResource.addResource('complete');
     completeResource.addMethod('POST', new apigateway.LambdaIntegration(mediaUploadFunction));
+    
+    const abortResource = multipartResource.addResource('abort');
+    abortResource.addMethod('POST', new apigateway.LambdaIntegration(mediaUploadFunction));
 
     // Outputs
     new cdk.CfnOutput(this, 'OrganizationId', {
