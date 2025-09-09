@@ -43,16 +43,16 @@ aws ssm get-parameter --name "/hlekkr/prod/github/token" --with-decryption
 ## 📊 Key Features Demonstrated
 
 ### 🤖 AI-Powered Analysis
-- **Trust Score Engine**: Composite scoring (deepfake + source + metadata + technical)
-- **Deepfake Detection**: 92% probability detection with technique identification
-- **Source Verification**: Domain reputation and authenticity checking
-- **Metadata Analysis**: Timestamp and location consistency validation
+- **✅ Trust Score Engine**: Multi-factor composite scoring with risk classification
+- **✅ Bedrock Integration**: Claude 3 Sonnet/Haiku ensemble with 25+ manipulation indicators
+- **✅ Source Verification**: Real-time domain reputation and blacklist checking
+- **✅ Metadata Analysis**: FFmpeg/Pillow/Mutagen extraction with consistency validation
 
 ### 🤝 Human-in-the-Loop (HITL)
-- **Intelligent Triggering**: Trust scores < 70 trigger human review
-- **Moderator Assignment**: Skill-based assignment system
-- **Review Interface**: Evidence collection and decision justification
-- **Quality Assurance**: Peer review and confidence tracking
+- **✅ Intelligent Triggering**: Trust scores < 70 trigger human review workflow
+- **✅ Moderator Assignment**: 100-point algorithm with skill/workload balancing
+- **✅ Review Workflow**: Complete lifecycle management and decision capture
+- **✅ Quality Assurance**: Peer review system with confidence tracking
 
 ### 🌍 Community Framework
 - **Threat Intelligence**: Automated report generation for confirmed threats

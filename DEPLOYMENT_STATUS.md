@@ -3,10 +3,11 @@
 ## ✅ Production Infrastructure
 
 ### Core Services Deployed
-- **✅ API Gateway**: [Deployed to AWS API Gateway]
-- **✅ Lambda Functions**: Upload handler, simple upload, virus scanning
-- **✅ DynamoDB**: Audit table with TTL and encryption
-- **✅ S3 Buckets**: Media uploads with versioning and lifecycle policies
+- **✅ API Gateway**: Live REST endpoints with CORS configuration
+- **✅ Lambda Functions**: 20+ functions including deepfake detector, security scanner, workflow orchestrator
+- **✅ Bedrock Integration**: Claude 3 Sonnet/Haiku ensemble with advanced prompts
+- **✅ DynamoDB**: Audit table with TTL, threat intelligence table, moderator profiles
+- **✅ S3 Buckets**: Media uploads, quarantine bucket, threat reports storage
 - **✅ IAM Roles**: Least-privilege access with organization-aware policies
 
 ### Endpoints Active
