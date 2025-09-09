@@ -3,7 +3,6 @@
 
 # 🛡️ Hlekkr - Next-Generation Media Integrity Platform
 
-**🏆 Hackathon & Research Project - Open Source Media Verification**
 
 Hlekkr revolutionizes media verification through cutting-edge AI analysis, intelligent human-in-the-loop workflows, and immutable audit trails. Our platform combines Amazon Bedrock's advanced foundation models with innovative human expertise integration to deliver unparalleled media authenticity verification.
 
