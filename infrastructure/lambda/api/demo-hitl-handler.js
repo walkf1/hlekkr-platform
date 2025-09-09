@@ -1,5 +1,6 @@
 const { DynamoDBClient, PutItemCommand } = require('@aws-sdk/client-dynamodb');
 const { marshall } = require('@aws-sdk/util-dynamodb');
+const { LambdaClient, InvokeCommand } = require('@aws-sdk/client-lambda');
 
 const dynamoClient = new DynamoDBClient({ region: process.env.AWS_REGION });
 
@@ -7,16 +8,46 @@ exports.handler = async (event) => {
   const { mediaId, fileName, s3Key } = JSON.parse(event.body || '{}');
   
   try {
-    // 1. Generate low trust score analysis
-    const analysisResult = {
-      mediaId,
-      fileName,
-      s3Key,
-      trustScore: { composite: 25, riskLevel: 'HIGH' },
-      deepfakeAnalysis: { probability: 0.92, techniques: ['face_swap'] },
-      requiresHumanReview: true,
-      analyzedAt: new Date().toISOString()
-    };
+    // 1. Call real Bedrock deepfake analysis
+    const lambdaClient = new LambdaClient({ region: process.env.AWS_REGION });
+    
+    let analysisResult;
+    try {
+      const deepfakeResponse = await lambdaClient.send(new InvokeCommand({
+        FunctionName: `hlekkr-org-uzpilj07pa-deepfake-970547381359-eu-central-1`,
+        Payload: JSON.stringify({ mediaId, s3Key: s3Key, fileType: fileName.split('.').pop() })
+      }));
+      
+      const deepfakeResult = JSON.parse(new TextDecoder().decode(deepfakeResponse.Payload));
+      const bedrockAnalysis = JSON.parse(deepfakeResult.body);
+      
+      const trustScore = Math.round((1 - bedrockAnalysis.analysisResult.deepfakeConfidence) * 100);
+      
+      analysisResult = {
+        mediaId,
+        fileName,
+        s3Key,
+        trustScore: { composite: trustScore, riskLevel: trustScore < 70 ? 'HIGH' : 'LOW' },
+        deepfakeAnalysis: {
+          probability: bedrockAnalysis.analysisResult.deepfakeConfidence,
+          techniques: bedrockAnalysis.analysisResult.detectedTechniques,
+          modelVersion: bedrockAnalysis.analysisResult.modelVersion
+        },
+        requiresHumanReview: trustScore < 70,
+        analyzedAt: new Date().toISOString(),
+        bedrockAnalysis: bedrockAnalysis.analysisResult
+      };
+    } catch (error) {
+      console.error('Bedrock analysis failed, using fallback:', error);
+      analysisResult = {
+        mediaId, fileName, s3Key,
+        trustScore: { composite: 25, riskLevel: 'HIGH' },
+        deepfakeAnalysis: { probability: 0.92, techniques: ['analysis_failed'] },
+        requiresHumanReview: true,
+        analyzedAt: new Date().toISOString(),
+        error: 'Bedrock analysis failed'
+      };
+    }
     
     // 2. Auto-generate simulated human review
     const reviewDecision = {

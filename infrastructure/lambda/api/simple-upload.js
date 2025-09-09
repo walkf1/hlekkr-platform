@@ -248,6 +248,9 @@ exports.handler = async (event) => {
       // Extract mediaId from key
       const mediaId = key.split('/')[1];
       
+      // Metadata extraction is handled automatically by S3 event triggers
+      // The sophisticated metadata_extractor Lambda will process this file
+      
       return {
         statusCode: 200,
         headers,

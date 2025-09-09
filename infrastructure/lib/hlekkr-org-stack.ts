@@ -1,5 +1,6 @@
 import * as cdk from 'aws-cdk-lib';
 import * as s3 from 'aws-cdk-lib/aws-s3';
+import * as s3n from 'aws-cdk-lib/aws-s3-notifications';
 import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as apigateway from 'aws-cdk-lib/aws-apigateway';
@@ -100,21 +101,53 @@ export class HlekkrOrgStack extends cdk.Stack {
       }
     });
 
+    const deepfakeDetectorFunction = new lambda.Function(this, 'HlekkrOrgDeepfakeDetector', {
+      functionName: `${orgPrefix}-deepfake-${this.account}-${this.region}`,
+      runtime: lambda.Runtime.PYTHON_3_9,
+      handler: 'index.handler',
+      code: lambda.Code.fromAsset('lambda/deepfake_detector'),
+      timeout: cdk.Duration.minutes(15),
+      memorySize: 3008,
+      environment: {
+        AUDIT_TABLE_NAME: auditTable.tableName,
+        MEDIA_BUCKET_NAME: mediaUploadsBucket.bucketName
+      }
+    });
+
     // Grant minimal permissions (principle of least privilege)
     mediaUploadsBucket.grantRead(healthCheckFunction);
     auditTable.grantReadData(healthCheckFunction);
     
-    // Upload function - specific S3 permissions only
+    // Upload function - S3 and DynamoDB permissions
     mediaUploadsBucket.grantPut(mediaUploadFunction);
     mediaUploadsBucket.grantPutAcl(mediaUploadFunction);
     auditTable.grantWriteData(mediaUploadFunction);
+    
+    // Add environment variable for audit table
+    mediaUploadFunction.addEnvironment('AUDIT_TABLE_NAME', auditTable.tableName);
     
     // Demo HITL function permissions
     auditTable.grantWriteData(demoHitlFunction);
     demoHitlFunction.addToRolePolicy(new iam.PolicyStatement({
       effect: iam.Effect.ALLOW,
-      actions: ['ssm:GetParameter'],
-      resources: [`arn:aws:ssm:${this.region}:${this.account}:parameter/hlekkr/prod/github/token`]
+      actions: ['ssm:GetParameter', 'lambda:InvokeFunction'],
+      resources: [
+        `arn:aws:ssm:${this.region}:${this.account}:parameter/hlekkr/prod/github/token`,
+        `arn:aws:lambda:${this.region}:${this.account}:function:${orgPrefix}-deepfake-${this.account}-${this.region}`
+      ]
+    }));
+    
+    // Deepfake detector permissions
+    auditTable.grantReadWriteData(deepfakeDetectorFunction);
+    mediaUploadsBucket.grantRead(deepfakeDetectorFunction);
+    deepfakeDetectorFunction.addToRolePolicy(new iam.PolicyStatement({
+      effect: iam.Effect.ALLOW,
+      actions: ['bedrock:InvokeModel'],
+      resources: [
+        `arn:aws:bedrock:${this.region}::foundation-model/anthropic.claude-3-sonnet-20240229-v1:0`,
+        `arn:aws:bedrock:${this.region}::foundation-model/anthropic.claude-3-haiku-20240307-v1:0`,
+        `arn:aws:bedrock:${this.region}::foundation-model/amazon.titan-image-generator-v1`
+      ]
     }));
 
     // API Gateway
@@ -163,6 +196,9 @@ export class HlekkrOrgStack extends cdk.Stack {
     const demoResource = api.root.addResource('demo');
     const hitlResource = demoResource.addResource('hitl');
     hitlResource.addMethod('POST', new apigateway.LambdaIntegration(demoHitlFunction));
+
+    // Note: Metadata extraction would be triggered by S3 events in full deployment
+    // For demo, we'll use the existing sophisticated metadata system
 
     // Outputs
     new cdk.CfnOutput(this, 'OrganizationId', {
