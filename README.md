@@ -55,7 +55,7 @@ The project represents a complete transformation from the legacy 'G.R.A.C.E.' pr
 
 ## 🚀 Quick Start
 
-**🎯 For Kiro Hackathon Judges**: See **[DEMO\_GUIDE.md](https://www.google.com/search?q=https://github.com/walkf1/hlekkr-platform/blob/main/DEMO_GUIDE.md)** for complete evaluation instructions.
+**🎯 For Evaluators**: See [DEMO_GUIDE.md](DEMO_GUIDE.md) for complete evaluation instructions.
 
 **Prerequisites**
 
