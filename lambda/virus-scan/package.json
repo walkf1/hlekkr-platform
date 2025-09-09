@@ -1,0 +1,9 @@
+{
+  "name": "virus-scan",
+  "version": "1.0.0",
+  "description": "ClamAV virus scanning for uploaded files",
+  "main": "index.js",
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.0.0"
+  }
+}

@@ -113,6 +113,12 @@ export class HlekkrOrgStack extends cdk.Stack {
     const uploadResource = api.root.addResource('upload');
     uploadResource.addMethod('POST', new apigateway.LambdaIntegration(mediaUploadFunction));
     
+    const presignedUrlResource = uploadResource.addResource('presigned-url');
+    presignedUrlResource.addMethod('POST', new apigateway.LambdaIntegration(mediaUploadFunction));
+    
+    const completeUploadResource = uploadResource.addResource('complete');
+    completeUploadResource.addMethod('POST', new apigateway.LambdaIntegration(mediaUploadFunction));
+    
     const multipartResource = uploadResource.addResource('multipart');
     const initializeResource = multipartResource.addResource('initialize');
     initializeResource.addMethod('POST', new apigateway.LambdaIntegration(mediaUploadFunction));

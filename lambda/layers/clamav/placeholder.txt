@@ -1,0 +1,8 @@
+This is a placeholder file for the ClamAV layer.
+
+To build the actual ClamAV layer:
+1. Run: ./build.sh
+2. This will create clamav-layer.zip
+3. Deploy the stack
+
+The layer provides ClamAV virus scanning capabilities for uploaded files.

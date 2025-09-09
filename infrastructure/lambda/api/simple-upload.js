@@ -1,7 +1,10 @@
 const { S3Client, CreateMultipartUploadCommand, PutObjectCommand, UploadPartCommand, CompleteMultipartUploadCommand, AbortMultipartUploadCommand } = require('@aws-sdk/client-s3');
 const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
 
-const s3Client = new S3Client({ region: process.env.AWS_REGION });
+const s3Client = new S3Client({ 
+  region: process.env.AWS_REGION,
+  requestChecksumCalculation: 'WHEN_REQUIRED'
+});
 const MEDIA_BUCKET = process.env.MEDIA_BUCKET_NAME;
 
 exports.handler = async (event) => {
@@ -159,6 +162,62 @@ exports.handler = async (event) => {
         statusCode: 200,
         headers,
         body: JSON.stringify({ success: true })
+      };
+    }
+
+    // Handle presigned URL for simple upload
+    if (path.includes('/presigned-url')) {
+      const { fileName, fileType } = body;
+      if (!fileName || !fileType) {
+        return {
+          statusCode: 400,
+          headers,
+          body: JSON.stringify({ error: 'fileName and fileType required' })
+        };
+      }
+
+      const mediaId = `media-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+      const s3Key = `uploads/${mediaId}/${fileName}`;
+
+      const putCommand = new PutObjectCommand({
+        Bucket: MEDIA_BUCKET,
+        Key: s3Key,
+        ContentType: fileType
+      });
+
+      const uploadUrl = await getSignedUrl(s3Client, putCommand, { expiresIn: 3600 });
+
+      return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify({
+          uploadUrl,
+          key: s3Key
+        })
+      };
+    }
+
+    // Handle upload complete notification
+    if (path.includes('/complete')) {
+      const { key, fileName, fileSize, fileType } = body;
+      if (!key || !fileName) {
+        return {
+          statusCode: 400,
+          headers,
+          body: JSON.stringify({ error: 'key and fileName required' })
+        };
+      }
+
+      // Extract mediaId from key
+      const mediaId = key.split('/')[1];
+      
+      return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify({
+          mediaId,
+          location: `https://${MEDIA_BUCKET}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`
+        })
       };
     }
 
