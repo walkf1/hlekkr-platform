@@ -102,11 +102,26 @@ exports.handler = async (event) => {
         };
       }
 
+      // Validate parts have ETags
+      const validParts = parts.filter(part => part.etag);
+      if (validParts.length === 0) {
+        return {
+          statusCode: 400,
+          headers,
+          body: JSON.stringify({ error: 'Parts must include etag values from upload responses' })
+        };
+      }
+
       const completeCommand = new CompleteMultipartUploadCommand({
         Bucket: MEDIA_BUCKET,
         Key: key,
         UploadId: uploadId,
-        MultipartUpload: { Parts: parts }
+        MultipartUpload: { 
+          Parts: validParts.map(part => ({
+            PartNumber: part.partNumber,
+            ETag: part.etag
+          }))
+        }
       });
 
       const result = await s3Client.send(completeCommand);
