@@ -1,11 +1,3 @@
-You are right to be precise about the links. My apologies. Let's ensure they are absolutely clear and functional by using the full, absolute URLs.
-
-Here is the final, corrected version of the `README.md` with the updated links for the "Contributing" and "License" sections.
-
------
-
-### **`README.md` for `hlekkr-platform`**
-
 # 🛡️ Hlekkr - Next-Generation Media Integrity Platform
 
 **🏆 Hackathon & Research Project - Open Source Media Verification**
