@@ -37,7 +37,7 @@ npm install && npm start
 
 ### **Production Architecture**
 - ✅ 20+ Lambda functions deployed
-- ✅ API Gateway live at: `https://17cxuv9v71.execute-api.eu-central-1.amazonaws.com/prod/`
+- ✅ API Gateway: Deployed and configured with cost protection
 - ✅ Cost protection with billing alarms
 - ✅ Demo/production mode toggle
 

@@ -143,7 +143,7 @@ export const ConnectedMediaUpload: React.FC = () => {
       }
 
       // Simulate API call to complete upload
-      const response = await fetch('https://17cxuv9v71.execute-api.eu-central-1.amazonaws.com/prod/upload/complete', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL || 'https://your-api-gateway-url.amazonaws.com/prod'}/upload/complete`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
