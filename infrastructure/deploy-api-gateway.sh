@@ -29,17 +29,17 @@ npx cdk bootstrap
 
 # Deploy the API stack
 echo "🏗️  Deploying API Gateway stack..."
-npx cdk deploy HlekkrApiStack --require-approval never
+npx cdk deploy HlekkrOrgStack --require-approval never
 
 # Get the API Gateway URL and API Key
 echo "📋 Getting deployment outputs..."
 API_URL=$(aws cloudformation describe-stacks \
-    --stack-name HlekkrApiStack \
+    --stack-name HlekkrOrgStack \
     --query 'Stacks[0].Outputs[?OutputKey==`ApiGatewayUrl`].OutputValue' \
     --output text)
 
 API_KEY_ID=$(aws cloudformation describe-stacks \
-    --stack-name HlekkrApiStack \
+    --stack-name HlekkrOrgStack \
     --query 'Stacks[0].Outputs[?OutputKey==`ApiKeyId`].OutputValue' \
     --output text)
 

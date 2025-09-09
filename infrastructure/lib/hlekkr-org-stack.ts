@@ -197,6 +197,35 @@ export class HlekkrOrgStack extends cdk.Stack {
     const hitlResource = demoResource.addResource('hitl');
     hitlResource.addMethod('POST', new apigateway.LambdaIntegration(demoHitlFunction));
 
+    // Media analysis endpoints
+    const mediaResource = api.root.addResource('media');
+    const mediaIdResource = mediaResource.addResource('{mediaId}');
+    
+    // POST /media/{mediaId}/analyze - Trigger deepfake analysis
+    const analyzeResource = mediaIdResource.addResource('analyze');
+    analyzeResource.addMethod('POST', new apigateway.LambdaIntegration(deepfakeDetectorFunction));
+    
+    // GET /media/{mediaId}/status - Get analysis status
+    const statusResource = mediaIdResource.addResource('status');
+    statusResource.addMethod('GET', new apigateway.LambdaIntegration(demoHitlFunction));
+    
+    // GET /media/{mediaId}/analysis - Get analysis results
+    const analysisResource = mediaIdResource.addResource('analysis');
+    analysisResource.addMethod('GET', new apigateway.LambdaIntegration(deepfakeDetectorFunction));
+    
+    // Trust Score endpoints
+    const trustScoresResource = api.root.addResource('trust-scores');
+    const trustScoreIdResource = trustScoresResource.addResource('{mediaId}');
+    
+    // GET /trust-scores - List trust scores
+    trustScoresResource.addMethod('GET', new apigateway.LambdaIntegration(demoHitlFunction));
+    
+    // GET /trust-scores/{mediaId} - Get specific trust score
+    trustScoreIdResource.addMethod('GET', new apigateway.LambdaIntegration(demoHitlFunction));
+    
+    // POST /trust-scores/{mediaId} - Calculate/recalculate trust score
+    trustScoreIdResource.addMethod('POST', new apigateway.LambdaIntegration(deepfakeDetectorFunction));
+
     // Note: Metadata extraction would be triggered by S3 events in full deployment
     // For demo, we'll use the existing sophisticated metadata system
 

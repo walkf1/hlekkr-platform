@@ -15,7 +15,7 @@ export class ApiClient {
     // Add request interceptor for auth
     this.client.interceptors.request.use(
       (config) => {
-        // Add API key for authentication
+        // Add API key for authentication (if available)
         const apiKey = process.env.REACT_APP_API_KEY || localStorage.getItem('hlekkr-api-key');
         if (apiKey) {
           config.headers['X-API-Key'] = apiKey;
