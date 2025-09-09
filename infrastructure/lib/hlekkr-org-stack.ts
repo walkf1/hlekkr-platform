@@ -43,7 +43,7 @@ export class HlekkrOrgStack extends cdk.Stack {
       removalPolicy: cdk.RemovalPolicy.DESTROY
     });
 
-    // Lambda with organization metadata
+    // Lambda functions
     const healthCheckFunction = new lambda.Function(this, 'HlekkrOrgHealthCheck', {
       functionName: `${orgPrefix}-health-${this.account}-${this.region}`,
       runtime: lambda.Runtime.NODEJS_18_X,
@@ -74,9 +74,24 @@ export class HlekkrOrgStack extends cdk.Stack {
       }
     });
 
+    const mediaUploadFunction = new lambda.Function(this, 'HlekkrOrgMediaUpload', {
+      functionName: `${orgPrefix}-upload-${this.account}-${this.region}`,
+      runtime: lambda.Runtime.NODEJS_18_X,
+      handler: 'media-upload.handler',
+      code: lambda.Code.fromAsset('lambda/api'),
+      timeout: cdk.Duration.minutes(5),
+      environment: {
+        ORGANIZATION_ID: props.organizationId,
+        MEDIA_BUCKET_NAME: mediaUploadsBucket.bucketName,
+        AUDIT_TABLE_NAME: auditTable.tableName
+      }
+    });
+
     // Grant permissions
     mediaUploadsBucket.grantRead(healthCheckFunction);
     auditTable.grantReadData(healthCheckFunction);
+    mediaUploadsBucket.grantReadWrite(mediaUploadFunction);
+    auditTable.grantWriteData(mediaUploadFunction);
 
     // API Gateway
     const api = new apigateway.RestApi(this, 'HlekkrOrgApi', {
@@ -87,13 +102,16 @@ export class HlekkrOrgStack extends cdk.Stack {
       },
       defaultCorsPreflightOptions: {
         allowOrigins: apigateway.Cors.ALL_ORIGINS,
-        allowMethods: apigateway.Cors.ALL_METHODS,
+        allowMethods: ['GET', 'POST', 'OPTIONS'],
         allowHeaders: ['Content-Type', 'X-Amz-Date', 'Authorization', 'X-Api-Key']
       }
     });
 
     const healthResource = api.root.addResource('health');
     healthResource.addMethod('GET', new apigateway.LambdaIntegration(healthCheckFunction));
+
+    const uploadResource = api.root.addResource('upload');
+    uploadResource.addMethod('POST', new apigateway.LambdaIntegration(mediaUploadFunction));
 
     // Outputs
     new cdk.CfnOutput(this, 'OrganizationId', {
