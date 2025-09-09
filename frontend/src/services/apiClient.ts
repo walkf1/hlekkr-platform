@@ -15,11 +15,18 @@ export class ApiClient {
     // Add request interceptor for auth
     this.client.interceptors.request.use(
       (config) => {
-        // Add auth token if available
+        // Add API key for authentication
+        const apiKey = process.env.REACT_APP_API_KEY || localStorage.getItem('hlekkr-api-key');
+        if (apiKey) {
+          config.headers['X-API-Key'] = apiKey;
+        }
+        
+        // Add auth token if available (for future IAM auth)
         const token = localStorage.getItem('authToken');
         if (token) {
           config.headers.Authorization = `Bearer ${token}`;
         }
+        
         return config;
       },
       (error) => Promise.reject(error)

@@ -22,9 +22,24 @@ export class HlekkrApiStack extends cdk.Stack {
       restApiName: 'Hlekkr Media Processing API',
       description: 'API for media upload, analysis, and deepfake detection',
       defaultCorsPreflightOptions: {
-        allowOrigins: apigateway.Cors.ALL_ORIGINS,
-        allowMethods: apigateway.Cors.ALL_METHODS,
-        allowHeaders: ['Content-Type', 'X-Amz-Date', 'Authorization', 'X-Api-Key']
+        allowOrigins: ['http://localhost:3000', 'https://*.hlekkr.com'],
+        allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+        allowHeaders: [
+          'Content-Type', 
+          'X-Amz-Date', 
+          'Authorization', 
+          'X-Api-Key',
+          'X-Amz-Security-Token',
+          'X-Amz-User-Agent'
+        ],
+        allowCredentials: true
+      },
+      deployOptions: {
+        stageName: 'prod',
+        throttle: {
+          rateLimit: 1000,
+          burstLimit: 2000
+        }
       }
     });
 
@@ -89,30 +104,80 @@ export class HlekkrApiStack extends cdk.Stack {
       resources: ['*']
     }));
 
+    // Create API Key for authentication
+    const apiKey = this.api.addApiKey('HlekkrApiKey', {
+      apiKeyName: 'hlekkr-frontend-key',
+      description: 'API key for Hlekkr frontend access'
+    });
+
+    // Create usage plan
+    const usagePlan = this.api.addUsagePlan('HlekkrUsagePlan', {
+      name: 'hlekkr-standard-plan',
+      description: 'Standard usage plan for Hlekkr API',
+      throttle: {
+        rateLimit: 100,
+        burstLimit: 200
+      },
+      quota: {
+        limit: 10000,
+        period: apigateway.Period.DAY
+      }
+    });
+
+    usagePlan.addApiKey(apiKey);
+    usagePlan.addApiStage({
+      stage: this.api.deploymentStage
+    });
+
     // API Gateway resources and methods
     const mediaResource = this.api.root.addResource('media');
     const mediaIdResource = mediaResource.addResource('{mediaId}');
 
     // POST /media - Upload media
     mediaResource.addMethod('POST', new apigateway.LambdaIntegration(reviewWorkflowTrigger), {
-      authorizationType: apigateway.AuthorizationType.IAM
+      apiKeyRequired: true
     });
 
     // GET /media/{mediaId} - Get media analysis results
     mediaIdResource.addMethod('GET', new apigateway.LambdaIntegration(trustScoreCalculator), {
-      authorizationType: apigateway.AuthorizationType.IAM
+      apiKeyRequired: true
     });
 
     // POST /media/{mediaId}/analyze - Trigger deepfake analysis
     const analyzeResource = mediaIdResource.addResource('analyze');
     analyzeResource.addMethod('POST', new apigateway.LambdaIntegration(deepfakeDetector), {
-      authorizationType: apigateway.AuthorizationType.IAM
+      apiKeyRequired: true
     });
 
-    // GET /media/{mediaId}/trust-score - Get trust score
-    const trustScoreResource = mediaIdResource.addResource('trust-score');
-    trustScoreResource.addMethod('GET', new apigateway.LambdaIntegration(trustScoreCalculator), {
-      authorizationType: apigateway.AuthorizationType.IAM
+    // GET /media/{mediaId}/status - Get analysis status
+    const statusResource = mediaIdResource.addResource('status');
+    statusResource.addMethod('GET', new apigateway.LambdaIntegration(reviewWorkflowTrigger), {
+      apiKeyRequired: true
+    });
+
+    // GET /media/{mediaId}/analysis - Get analysis results
+    const analysisResource = mediaIdResource.addResource('analysis');
+    analysisResource.addMethod('GET', new apigateway.LambdaIntegration(deepfakeDetector), {
+      apiKeyRequired: true
+    });
+
+    // Trust Score endpoints
+    const trustScoresResource = this.api.root.addResource('trust-scores');
+    const trustScoreIdResource = trustScoresResource.addResource('{mediaId}');
+
+    // GET /trust-scores - List trust scores
+    trustScoresResource.addMethod('GET', new apigateway.LambdaIntegration(trustScoreCalculator), {
+      apiKeyRequired: true
+    });
+
+    // GET /trust-scores/{mediaId} - Get specific trust score
+    trustScoreIdResource.addMethod('GET', new apigateway.LambdaIntegration(trustScoreCalculator), {
+      apiKeyRequired: true
+    });
+
+    // POST /trust-scores/{mediaId} - Calculate/recalculate trust score
+    trustScoreIdResource.addMethod('POST', new apigateway.LambdaIntegration(trustScoreCalculator), {
+      apiKeyRequired: true
     });
 
     // Outputs
@@ -129,6 +194,16 @@ export class HlekkrApiStack extends cdk.Stack {
     new cdk.CfnOutput(this, 'TrustScoreCalculatorArn', {
       value: trustScoreCalculator.functionArn,
       description: 'ARN of the trust score calculator Lambda function'
+    });
+
+    new cdk.CfnOutput(this, 'ApiKeyId', {
+      value: apiKey.keyId,
+      description: 'API Key ID for frontend authentication'
+    });
+
+    new cdk.CfnOutput(this, 'ApiKeyValue', {
+      value: apiKey.keyArn,
+      description: 'API Key ARN (retrieve value from AWS Console)'
     });
   }
 }
