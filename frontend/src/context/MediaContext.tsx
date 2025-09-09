@@ -48,6 +48,8 @@ interface MediaContextType {
   updateMediaStatus: (mediaId: string, updates: Partial<UploadedMedia>) => void;
   setCurrentMedia: (mediaId: string | null) => void;
   getMediaById: (mediaId: string) => UploadedMedia | undefined;
+  error: string | null;
+  clearError: () => void;
 }
 
 const MediaContext = createContext<MediaContextType | undefined>(undefined);
@@ -67,6 +69,7 @@ interface MediaProviderProps {
 export const MediaProvider: React.FC<MediaProviderProps> = ({ children }) => {
   const [uploadedMedia, setUploadedMedia] = useState<UploadedMedia[]>([]);
   const [currentMedia, setCurrentMediaState] = useState<UploadedMedia | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   // Load from localStorage on mount
   useEffect(() => {
@@ -75,49 +78,77 @@ export const MediaProvider: React.FC<MediaProviderProps> = ({ children }) => {
       try {
         const parsed = JSON.parse(saved);
         setUploadedMedia(parsed);
-      } catch (error) {
-        console.error('Failed to load saved media:', error);
+      } catch (err) {
+        setError('Failed to load saved media');
+        console.error('Failed to load saved media:', err);
       }
     }
   }, []);
 
   // Save to localStorage when media changes
   useEffect(() => {
-    localStorage.setItem('hlekkr-uploaded-media', JSON.stringify(uploadedMedia));
+    try {
+      localStorage.setItem('hlekkr-uploaded-media', JSON.stringify(uploadedMedia));
+    } catch (err) {
+      setError('Failed to save media data');
+      console.error('Failed to save media data:', err);
+    }
   }, [uploadedMedia]);
 
   const addUploadedMedia = (media: UploadedMedia) => {
-    setUploadedMedia(prev => {
-      const existing = prev.find(m => m.mediaId === media.mediaId);
-      if (existing) {
-        return prev.map(m => m.mediaId === media.mediaId ? { ...m, ...media } : m);
-      }
-      return [media, ...prev];
-    });
+    try {
+      setUploadedMedia(prev => {
+        const existing = prev.find(m => m.mediaId === media.mediaId);
+        if (existing) {
+          return prev.map(m => m.mediaId === media.mediaId ? { ...m, ...media } : m);
+        }
+        return [media, ...prev];
+      });
+      setError(null);
+    } catch (err) {
+      setError('Failed to add media');
+      console.error('MediaContext error:', err);
+    }
   };
 
   const updateMediaStatus = (mediaId: string, updates: Partial<UploadedMedia>) => {
-    setUploadedMedia(prev => 
-      prev.map(media => 
-        media.mediaId === mediaId 
-          ? { ...media, ...updates }
-          : media
-      )
-    );
-    
-    // Update current media if it's the one being updated
-    if (currentMedia?.mediaId === mediaId) {
-      setCurrentMediaState(prev => prev ? { ...prev, ...updates } : null);
+    try {
+      setUploadedMedia(prev => 
+        prev.map(media => 
+          media.mediaId === mediaId 
+            ? { ...media, ...updates }
+            : media
+        )
+      );
+      
+      // Update current media if it's the one being updated
+      if (currentMedia?.mediaId === mediaId) {
+        setCurrentMediaState(prev => prev ? { ...prev, ...updates } : null);
+      }
+      setError(null);
+    } catch (err) {
+      setError('Failed to update media');
+      console.error('MediaContext error:', err);
     }
   };
 
   const setCurrentMedia = (mediaId: string | null) => {
-    if (mediaId) {
-      const media = uploadedMedia.find(m => m.mediaId === mediaId);
-      setCurrentMediaState(media || null);
-    } else {
-      setCurrentMediaState(null);
+    try {
+      if (mediaId) {
+        const media = uploadedMedia.find(m => m.mediaId === mediaId);
+        setCurrentMediaState(media || null);
+      } else {
+        setCurrentMediaState(null);
+      }
+      setError(null);
+    } catch (err) {
+      setError('Failed to set current media');
+      console.error('MediaContext error:', err);
     }
+  };
+
+  const clearError = () => {
+    setError(null);
   };
 
   const getMediaById = (mediaId: string) => {
@@ -131,7 +162,9 @@ export const MediaProvider: React.FC<MediaProviderProps> = ({ children }) => {
       addUploadedMedia,
       updateMediaStatus,
       setCurrentMedia,
-      getMediaById
+      getMediaById,
+      error,
+      clearError
     }}>
       {children}
     </MediaContext.Provider>
