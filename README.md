@@ -69,8 +69,8 @@ node test-hitl-workflow.js
 cd frontend && npm install && npm start
 # Visit http://localhost:3001
 
-# Test live API endpoints
-curl https://17cxuv9v71.execute-api.eu-central-1.amazonaws.com/prod/upload/presigned-url \
+# Test live API endpoints (replace with your deployed URL)
+curl $YOUR_API_GATEWAY_URL/upload/presigned-url \
   -X POST -H "Content-Type: application/json" \
   -d '{"fileName":"test.jpg","fileType":"image/jpeg"}'
 ```

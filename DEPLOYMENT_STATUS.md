@@ -1,9 +1,9 @@
 # 🚀 Hlekkr Platform - Live Deployment Status
 
-## ✅ Production Infrastructure (AWS Account: 970547381359)
+## ✅ Production Infrastructure
 
 ### Core Services Deployed
-- **✅ API Gateway**: https://17cxuv9v71.execute-api.eu-central-1.amazonaws.com/prod/
+- **✅ API Gateway**: [Deployed to AWS API Gateway]
 - **✅ Lambda Functions**: Upload handler, simple upload, virus scanning
 - **✅ DynamoDB**: Audit table with TTL and encryption
 - **✅ S3 Buckets**: Media uploads with versioning and lifecycle policies
@@ -24,7 +24,7 @@ GET /health
 ```
 
 ### Security Features
-- **✅ Organization Boundary**: Restricted to AWS Org o-uzpilj07pa
+- **✅ Organization Boundary**: Restricted to AWS Organization
 - **✅ Encryption**: AES-256 for S3, DynamoDB encryption at rest
 - **✅ Access Control**: IAM roles with minimal permissions
 - **✅ Audit Trail**: All operations logged to DynamoDB with TTL

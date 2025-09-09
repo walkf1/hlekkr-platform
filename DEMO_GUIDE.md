@@ -3,9 +3,9 @@
 ## 🚀 Live Deployment Status
 
 **✅ PRODUCTION DEPLOYED**
-- **API URL**: https://17cxuv9v71.execute-api.eu-central-1.amazonaws.com/prod/
+- **API URL**: [Deployed to AWS API Gateway]
 - **Frontend**: http://localhost:3001 (after `npm start` in frontend/)
-- **AWS Account**: 970547381359 (eu-central-1)
+- **AWS Region**: eu-central-1
 - **GitHub Integration**: Active with hlekkr-framework repository
 
 ## 🧪 Testing the Complete HITL Workflow
@@ -116,8 +116,8 @@ node test-hitl-workflow.js
 cd frontend && npm install && npm start
 # Visit http://localhost:3001
 
-# 4. Test live API
-curl https://17cxuv9v71.execute-api.eu-central-1.amazonaws.com/prod/upload/presigned-url \
+# 4. Test live API (replace with your deployed URL)
+curl $YOUR_API_GATEWAY_URL/upload/presigned-url \
   -X POST \
   -H "Content-Type: application/json" \
   -d '{"fileName":"test.jpg","fileType":"image/jpeg"}'
