@@ -74,6 +74,7 @@ interface AnalysisResultsDashboardProps {
   onMediaSelect?: (media: MediaAnalysisResult) => void;
   onBulkAction?: (action: string, mediaIds: string[]) => void;
   className?: string;
+  results?: MediaAnalysisResult[];
 }
 
 // Styled Components
@@ -143,7 +144,8 @@ export const AnalysisResultsDashboard: React.FC<AnalysisResultsDashboardProps> =
   pageSize = 20,
   onMediaSelect,
   onBulkAction,
-  className
+  className,
+  results: propResults
 }) => {
   const [results, setResults] = useState<MediaAnalysisResult[]>([]);
   const [filteredResults, setFilteredResults] = useState<MediaAnalysisResult[]>([]);
@@ -222,10 +224,10 @@ export const AnalysisResultsDashboard: React.FC<AnalysisResultsDashboardProps> =
     const loadData = async () => {
       setLoading(true);
       try {
-        // In a real app, this would be an API call
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        setResults(mockResults);
-        setFilteredResults(mockResults);
+        // Use prop results if provided, otherwise use mock data
+        const dataToUse = propResults && propResults.length > 0 ? propResults : mockResults;
+        setResults(dataToUse);
+        setFilteredResults(dataToUse);
       } catch (err) {
         setError('Failed to load analysis results');
       } finally {
@@ -234,7 +236,7 @@ export const AnalysisResultsDashboard: React.FC<AnalysisResultsDashboardProps> =
     };
 
     loadData();
-  }, []);
+  }, [propResults]);
 
   // Filter results
   useEffect(() => {

@@ -3,7 +3,9 @@ import styled from 'styled-components';
 import { TrustScoreDashboard } from './components/TrustScore';
 import { MediaUploadDemo } from './components/MediaUpload/MediaUploadDemo';
 import { AnalysisDashboardDemo } from './components/AnalysisDashboard/AnalysisDashboardDemo';
-import { Upload, BarChart3, Activity } from 'lucide-react';
+import { RealTimeAnalysis } from './components/RealTimeAnalysis';
+import { MediaProvider } from './context/MediaContext';
+import { Upload, BarChart3, Activity, Eye } from 'lucide-react';
 
 const AppContainer = styled.div`
   min-height: 100vh;
@@ -47,7 +49,7 @@ const NavButton = styled.button<{ active: boolean }>`
   }
 `;
 
-type View = 'upload' | 'dashboard' | 'analysis';
+type View = 'upload' | 'dashboard' | 'analysis' | 'realtime';
 
 const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<View>('upload');
@@ -57,6 +59,7 @@ const App: React.FC = () => {
   const MEDIA_ID = process.env.REACT_APP_MEDIA_ID; // Optional, for single media view
 
   return (
+    <MediaProvider>
     <AppContainer>
       <Navigation>
         <Logo>Hlekkr</Logo>
@@ -67,6 +70,14 @@ const App: React.FC = () => {
         >
           <Upload size={16} />
           Media Upload
+        </NavButton>
+        
+        <NavButton 
+          active={currentView === 'realtime'} 
+          onClick={() => setCurrentView('realtime')}
+        >
+          <Eye size={16} />
+          Your Upload
         </NavButton>
         
         <NavButton 
@@ -88,6 +99,8 @@ const App: React.FC = () => {
 
       {currentView === 'upload' && <MediaUploadDemo />}
       
+      {currentView === 'realtime' && <RealTimeAnalysis />}
+      
       {currentView === 'analysis' && <AnalysisDashboardDemo />}
       
       {currentView === 'dashboard' && (
@@ -99,6 +112,7 @@ const App: React.FC = () => {
         </div>
       )}
     </AppContainer>
+    </MediaProvider>
   );
 };
 

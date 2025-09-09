@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { AnalysisResultsDashboard, MediaAnalysisResult } from './AnalysisResultsDashboard';
+import { useMedia } from '../../context/MediaContext';
 import { 
   BarChart3, 
   Shield, 
@@ -195,6 +196,7 @@ const generateMockData = (): MediaAnalysisResult[] => {
 };
 
 export const AnalysisDashboardDemo: React.FC = () => {
+  const { uploadedMedia } = useMedia();
   const [selectedMedia, setSelectedMedia] = useState<MediaAnalysisResult | null>(null);
   const [interactionStats, setInteractionStats] = useState({
     mediaViewed: 0,
@@ -203,7 +205,37 @@ export const AnalysisDashboardDemo: React.FC = () => {
     exportsGenerated: 0
   });
 
-  const mockData = generateMockData();
+  // Convert uploaded media to analysis format
+  const analysisData: MediaAnalysisResult[] = uploadedMedia.map(media => ({
+    mediaId: media.mediaId,
+    fileName: media.fileName,
+    fileType: media.fileType,
+    fileSize: media.fileSize,
+    uploadedAt: media.uploadedAt,
+    analyzedAt: new Date().toISOString(),
+    trustScore: media.trustScore,
+    status: 'completed' as any,
+    deepfakeAnalysis: {
+      probability: media.deepfakeConfidence,
+      confidence: 0.9,
+      techniques: media.bedrockAnalysis?.claudeSonnet?.techniques || [],
+      modelVersion: 'v3.0.0'
+    },
+    sourceVerification: {
+      status: 'verified' as any,
+      reputationScore: 85,
+      domain: 'user-upload'
+    },
+    metadataAnalysis: {
+      consistent: true,
+      anomalies: [],
+      extractedData: {},
+      originalMetadata: {}
+    }
+  }));
+
+  // Use real data if available, otherwise fallback to mock
+  const displayData = analysisData.length > 0 ? analysisData : generateMockData();
 
   const handleMediaSelect = (media: MediaAnalysisResult) => {
     setSelectedMedia(media);
@@ -298,40 +330,11 @@ export const AnalysisDashboardDemo: React.FC = () => {
           <AnalysisResultsDashboard
             onMediaSelect={handleMediaSelect}
             onBulkAction={handleBulkAction}
+            results={displayData}
           />
         </DashboardWrapper>
 
-        <StatsOverlay>
-          <div style={{ fontWeight: '600', marginBottom: '12px', color: '#111827' }}>
-            Demo Interactions
-          </div>
-          <StatItem>
-            <StatLabel>Media Viewed:</StatLabel>
-            <StatValue>{interactionStats.mediaViewed}</StatValue>
-          </StatItem>
-          <StatItem>
-            <StatLabel>Bulk Actions:</StatLabel>
-            <StatValue>{interactionStats.bulkActions}</StatValue>
-          </StatItem>
-          <StatItem>
-            <StatLabel>Total Media:</StatLabel>
-            <StatValue>{mockData.length}</StatValue>
-          </StatItem>
-          <StatItem>
-            <StatLabel>Under Review:</StatLabel>
-            <StatValue>{mockData.filter(m => m.status === 'under_review').length}</StatValue>
-          </StatItem>
-          <StatItem>
-            <StatLabel>Flagged:</StatLabel>
-            <StatValue>{mockData.filter(m => m.status === 'flagged').length}</StatValue>
-          </StatItem>
-          <StatItem>
-            <StatLabel>Avg Trust Score:</StatLabel>
-            <StatValue>
-              {(mockData.reduce((sum, m) => sum + m.trustScore, 0) / mockData.length).toFixed(1)}%
-            </StatValue>
-          </StatItem>
-        </StatsOverlay>
+
       </DemoContent>
     </DemoContainer>
   );

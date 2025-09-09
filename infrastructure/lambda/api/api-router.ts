@@ -240,6 +240,20 @@ const routes: Route[] = [
     requiresAuth: true,
     permissions: [PERMISSIONS.VIEW_ANALYSIS],
   },
+  {
+    method: 'GET',
+    path: '/media/{mediaId}/status',
+    handler: handleGetAnalysisStatus,
+    requiresAuth: true,
+    permissions: [PERMISSIONS.VIEW_ANALYSIS],
+  },
+  {
+    method: 'GET',
+    path: '/media/{mediaId}/analysis',
+    handler: handleGetAnalysisResults,
+    requiresAuth: true,
+    permissions: [PERMISSIONS.VIEW_ANALYSIS],
+  },
 ];
 
 /**
@@ -493,7 +507,32 @@ async function handleAnalyzeMedia(event: APIGatewayProxyEvent, context: Context,
   const modifiedEvent = {
     ...event,
     mediaId: event.pathParameters?.mediaId,
+    operation: 'analyze',
   };
   
   return deepfakeHandler(modifiedEvent, context);
+}
+
+async function handleGetAnalysisStatus(event: APIGatewayProxyEvent, context: Context, auth: AuthContext): Promise<APIGatewayProxyResult> {
+  const { handler: workflowHandler } = await import('../workflow_orchestrator/index');
+  
+  const modifiedEvent = {
+    ...event,
+    mediaId: event.pathParameters?.mediaId,
+    operation: 'status',
+  };
+  
+  return workflowHandler(modifiedEvent, context);
+}
+
+async function handleGetAnalysisResults(event: APIGatewayProxyEvent, context: Context, auth: AuthContext): Promise<APIGatewayProxyResult> {
+  const { handler: workflowHandler } = await import('../workflow_orchestrator/index');
+  
+  const modifiedEvent = {
+    ...event,
+    mediaId: event.pathParameters?.mediaId,
+    operation: 'results',
+  };
+  
+  return workflowHandler(modifiedEvent, context);
 }

@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { EnhancedMediaUpload } from './EnhancedMediaUpload';
 import { UploadFile } from './MediaUploadInterface';
+import { useMedia } from '../../context/MediaContext';
+// import { testApiConnection } from '../../services/testAnalysis';
 import { 
   Upload, 
   Shield, 
@@ -262,9 +264,39 @@ export const MediaUploadDemo: React.FC = () => {
     enableResumableUploads: true
   });
 
+  const { addUploadedMedia } = useMedia();
+  const [apiAvailable, setApiAvailable] = useState<boolean | null>(false);
+  
   const handleUploadComplete = (files: UploadFile[]) => {
     setUploadedFiles(prev => [...prev, ...files]);
-    console.log('Upload completed:', files);
+    
+    // Add each file to media context
+    files.forEach(file => {
+      const trustScore = file.trustScore || (file.type.startsWith('image/') ? 85 : 32);
+      addUploadedMedia({
+        mediaId: file.id,
+        fileName: file.name,
+        fileType: file.type,
+        fileSize: file.size,
+        uploadedAt: new Date().toISOString(),
+        location: file.url || '',
+        status: 'completed',
+        trustScore: trustScore > 1 ? trustScore : Math.round(trustScore * 100),
+        deepfakeConfidence: file.type.startsWith('image/') ? 0.15 : 0.75,
+        analysisStatus: 'completed',
+        securityScan: { status: 'completed', result: 'clean' },
+        metadataExtraction: { status: 'completed' },
+        bedrockAnalysis: { 
+          status: 'completed',
+          claudeSonnet: { confidence: file.type.startsWith('image/') ? 0.15 : 0.78, techniques: ['analysis_complete'] },
+          claudeHaiku: { confidence: file.type.startsWith('image/') ? 0.12 : 0.72, techniques: ['processing_done'] },
+          titan: { confidence: file.type.startsWith('image/') ? 0.18 : 0.75, techniques: ['validation_complete'] }
+        },
+        hitlReview: { status: 'not_required' }
+      });
+    });
+    
+    console.log('Upload completed and added to context:', files);
   };
 
   const handleUploadProgress = (files: UploadFile[]) => {
@@ -277,6 +309,32 @@ export const MediaUploadDemo: React.FC = () => {
 
   const handleFileAnalysisComplete = (file: UploadFile, analysis: any) => {
     console.log('Analysis completed:', file, analysis);
+    
+    // Convert trust score to 0-100 scale if needed
+    const trustScore = analysis.trustScore > 1 ? analysis.trustScore : analysis.trustScore * 100;
+    
+    // Add to media context when analysis completes
+    addUploadedMedia({
+      mediaId: analysis.mediaId || file.id,
+      fileName: file.name,
+      fileType: file.type,
+      fileSize: file.size,
+      uploadedAt: new Date().toISOString(),
+      location: file.url || '',
+      status: 'completed',
+      trustScore: Math.round(trustScore),
+      deepfakeConfidence: analysis.analysisResults?.deepfakeDetection?.probability || 0.5,
+      analysisStatus: 'completed',
+      securityScan: { status: 'completed', result: 'clean' },
+      metadataExtraction: { status: 'completed' },
+      bedrockAnalysis: { 
+        status: 'completed',
+        claudeSonnet: { confidence: analysis.analysisResults?.deepfakeDetection?.confidence || 0.5, techniques: ['analysis_complete'] },
+        claudeHaiku: { confidence: analysis.analysisResults?.deepfakeDetection?.confidence || 0.5, techniques: ['processing_done'] },
+        titan: { confidence: analysis.analysisResults?.deepfakeDetection?.confidence || 0.5, techniques: ['validation_complete'] }
+      },
+      hitlReview: { status: 'not_required' }
+    });
   };
 
   const formatFileSize = (mb: number) => {
@@ -302,8 +360,9 @@ export const MediaUploadDemo: React.FC = () => {
           <Title>Hlekkr Media Upload</Title>
           <Subtitle>
             Advanced media upload interface with drag & drop, progress tracking, 
-            resumable uploads, and real-time deepfake analysis
+            resumable uploads, and simulated deepfake analysis
           </Subtitle>
+
         </Header>
 
         <FeatureGrid>
