@@ -43,6 +43,10 @@ The original, pre-transformation 'G.R.A.C.E.' repository can be viewed for histo
 
 ## 🚀 Quick Start
 
+**🎯 For Kiro Hackathon Judges**: See [DEMO_GUIDE.md](DEMO_GUIDE.md) for complete evaluation instructions
+
+**📊 Live Deployment Status**: See [DEPLOYMENT_STATUS.md](DEPLOYMENT_STATUS.md) for production infrastructure details
+
 **Prerequisites**
 
   * AWS CLI configured with appropriate permissions
@@ -50,19 +54,33 @@ The original, pre-transformation 'G.R.A.C.E.' repository can be viewed for histo
   * AWS CDK 2.70.0+
   * Python 3.9+ (for Lambda functions)
 
-**Installation & Deployment**
+**Test the Live System**
 
 ```bash
 # Clone the repository
 git clone https://github.com/walkf1/hlekkr-platform.git
 cd hlekkr-platform
 
-# Install dependencies for CDK and frontend
-cd infrastructure
+# Test HITL workflow (no deployment needed)
 npm install
+node test-hitl-workflow.js
 
-# Deploy the full serverless infrastructure
-npm run build
+# Start frontend demo
+cd frontend && npm install && npm start
+# Visit http://localhost:3001
+
+# Test live API endpoints
+curl https://17cxuv9v71.execute-api.eu-central-1.amazonaws.com/prod/upload/presigned-url \
+  -X POST -H "Content-Type: application/json" \
+  -d '{"fileName":"test.jpg","fileType":"image/jpeg"}'
+```
+
+**Full Deployment (Optional)**
+
+```bash
+# Deploy your own instance
+cd infrastructure
+npm install && npm run build
 cdk bootstrap  # First time only
 cdk deploy --all
 ```
