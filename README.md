@@ -38,7 +38,7 @@ The original, pre-transformation 'G.R.A.C.E.' repository can be viewed for histo
 ### 🌍 The Community Moat: An Open Source Framework
 
   * **Public Threat Intelligence System:** An automated system that generates anonymized "threat reports" for confirmed deepfakes.
-  * **Open Source Media Risk Framework:** A public GitHub repository, automatically populated by an agent hook, that provides a community-driven resource of deepfake indicators. **[Explore the live framework here.](https://github.com/walkf1/hlekkr-framework)**
+  * **Open Source Media Risk Framework:** A public GitHub repository, automatically populated by an agent hook, that provides a community-driven resource of deepfake indicators. **[Explore the live framework here.](https://github.com/hlekkr/hlekkr-framework)**
   * **Public REST API:** A public-facing API to allow researchers and third parties to access the threat intelligence data.
 
 ## 🚀 Quick Start

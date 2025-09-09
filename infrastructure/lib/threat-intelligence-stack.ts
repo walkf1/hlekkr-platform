@@ -25,9 +25,17 @@ export class ThreatIntelligenceStack extends cdk.Stack {
   public readonly threatAlertsQueue: sqs.Queue;
   public readonly threatAlertsTopic: sns.Topic;
   public readonly threatIntelligenceApi: apigateway.RestApi;
+  private readonly threatIntelligenceTable: dynamodb.Table;
+  private readonly mediaAnalysisTable: dynamodb.Table;
+  private readonly reviewDecisionsTable: dynamodb.Table;
 
   constructor(scope: Construct, id: string, props: ThreatIntelligenceStackProps) {
     super(scope, id, props);
+    
+    // Store table references
+    this.threatIntelligenceTable = props.threatIntelligenceTable;
+    this.mediaAnalysisTable = props.mediaAnalysisTable;
+    this.reviewDecisionsTable = props.reviewDecisionsTable;
 
     // S3 bucket for storing detailed threat reports
     this.threatReportsBucket = new s3.Bucket(this, 'ThreatReportsBucket', {
@@ -141,9 +149,9 @@ export class ThreatIntelligenceStack extends cdk.Stack {
 
   private grantLambdaPermissions(): void {
     // DynamoDB permissions
-    this.props.threatIntelligenceTable.grantReadWriteData(this.threatReportGenerator);
-    this.props.mediaAnalysisTable.grantReadData(this.threatReportGenerator);
-    this.props.reviewDecisionsTable.grantReadData(this.threatReportGenerator);
+    this.threatIntelligenceTable.grantReadWriteData(this.threatReportGenerator);
+    this.mediaAnalysisTable.grantReadData(this.threatReportGenerator);
+    this.reviewDecisionsTable.grantReadData(this.threatReportGenerator);
 
     // S3 permissions
     this.threatReportsBucket.grantReadWrite(this.threatReportGenerator);
@@ -163,7 +171,7 @@ export class ThreatIntelligenceStack extends cdk.Stack {
         'ssm:GetParametersByPath',
       ],
       resources: [
-        `arn:aws:ssm:${this.region}:${this.account}:parameter/hlekkr/${this.props.environment}/github/*`,
+        `arn:aws:ssm:${this.region}:${this.account}:parameter/hlekkr/prod/github/*`,
       ],
     }));
 
@@ -232,7 +240,7 @@ export class ThreatIntelligenceStack extends cdk.Stack {
   private createEventBridgeRules(): void {
     // Rule for processing human review decisions
     const reviewDecisionRule = new events.Rule(this, 'ReviewDecisionRule', {
-      ruleName: `hlekkr-${this.props.environment}-review-decision-processing`,
+      ruleName: `hlekkr-prod-review-decision-processing`,
       description: 'Process human review decisions for threat intelligence',
       eventPattern: {
         source: ['hlekkr.review'],
@@ -249,7 +257,7 @@ export class ThreatIntelligenceStack extends cdk.Stack {
 
     // Rule for processing high-confidence AI detections
     const aiDetectionRule = new events.Rule(this, 'AIDetectionRule', {
-      ruleName: `hlekkr-${this.props.environment}-ai-detection-processing`,
+      ruleName: `hlekkr-prod-ai-detection-processing`,
       description: 'Process high-confidence AI detections for threat intelligence',
       eventPattern: {
         source: ['hlekkr.analysis'],
@@ -271,7 +279,7 @@ export class ThreatIntelligenceStack extends cdk.Stack {
 
     // Scheduled rule for periodic threat analysis
     const periodicAnalysisRule = new events.Rule(this, 'PeriodicAnalysisRule', {
-      ruleName: `hlekkr-${this.props.environment}-periodic-threat-analysis`,
+      ruleName: `hlekkr-prod-periodic-threat-analysis`,
       description: 'Periodic threat pattern analysis',
       schedule: events.Schedule.rate(cdk.Duration.hours(6)),
     });
