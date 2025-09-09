@@ -464,7 +464,7 @@ export class UploadService {
 
 // Default upload service instance
 export const uploadService = new UploadService({
-  apiEndpoint: process.env.REACT_APP_API_ENDPOINT || '/api',
+  apiEndpoint: process.env.REACT_APP_API_URL || '/api',
   region: process.env.REACT_APP_AWS_REGION || 'us-east-1',
   chunkSize: 5 * 1024 * 1024, // 5MB
   maxRetries: 3
