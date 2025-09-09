@@ -32,7 +32,7 @@ export const ConnectedTrustScore: React.FC = () => {
   return (
     <Container>
       <TrustScoreDashboard
-        apiBaseUrl={process.env.REACT_APP_API_URL || 'https://your-api-gateway-url.amazonaws.com/prod'}
+        apiBaseUrl={process.env.REACT_APP_API_URL || 'https://api.example.com/prod'}
         mediaId={mediaToAnalyze.mediaId}
       />
     </Container>

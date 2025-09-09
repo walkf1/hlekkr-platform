@@ -289,7 +289,7 @@ describe('EnhancedMediaUpload', () => {
     mockUploadService.validateFile.mockReturnValue(null); // No validation errors
     mockUploadService.uploadFile.mockResolvedValue({
       mediaId: 'test-media-123',
-      location: 'https://s3.amazonaws.com/bucket/test-media-123'
+      location: 'https://storage.example.com/bucket/test-media-123'
     });
   });
 

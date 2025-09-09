@@ -9,12 +9,23 @@
 # Production
 /build
 
-# Misc
-.DS_Store
+# Environment variables (NEVER COMMIT)
+.env
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
+
+# AWS credentials
+.aws/
+aws-exports.js
+
+# Security
+*.pem
+*.key
+
+# Misc
+.DS_Store
 
 # Logs
 npm-debug.log*
