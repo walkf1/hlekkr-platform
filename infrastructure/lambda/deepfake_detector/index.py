@@ -39,6 +39,22 @@ def handler(event, context):
     try:
         logger.info(f"Processing request: {json.dumps(event)}")
         
+        # Cost protection: Check API key and demo mode
+        api_key = event.get('headers', {}).get('x-api-key') or event.get('headers', {}).get('X-API-Key')
+        demo_mode = os.environ.get('DEMO_MODE', 'true').lower() == 'true'
+        valid_api_key = api_key == os.environ.get('HLEKKR_API_KEY')
+        
+        # Log access attempt for monitoring
+        logger.info(f"Access attempt - Demo mode: {demo_mode}, API key provided: {bool(api_key)}")
+        
+        if not demo_mode and not valid_api_key:
+            return create_error_response(401, 'API key required for production analysis. Contact team for access.')
+        
+        # Use demo analysis if in demo mode
+        if demo_mode and not valid_api_key:
+            logger.info("Using demo mode analysis")
+            return handle_demo_analysis(event)
+        
         # Determine operation from HTTP method and path
         http_method = event.get('httpMethod', 'POST')
         path = event.get('resource', '')
@@ -1184,6 +1200,51 @@ def enhance_analysis_with_technique_classification(analysis_result: Dict[str, An
         analysis_result['technique_classification_error'] = str(e)
         return analysis_result
 
+def handle_demo_analysis(event: dict) -> dict:
+    """Handle demo mode analysis with simulated results."""
+    try:
+        path = event.get('resource', '')
+        media_id = event.get('pathParameters', {}).get('mediaId', 'demo-media')
+        
+        if '/analyze' in path:
+            # Return demo analysis result
+            return create_success_response({
+                'mediaId': media_id,
+                'status': 'completed',
+                'trustScore': 78.5,
+                'analysisResults': {
+                    'deepfakeDetection': {
+                        'probability': 0.215,
+                        'confidence': 0.89,
+                        'techniques': ['authentic_indicators', 'consistent_lighting']
+                    },
+                    'sourceVerification': {'status': 'verified', 'reputationScore': 85},
+                    'metadataAnalysis': {'consistent': True, 'anomalies': []}
+                },
+                'mode': 'demo',
+                'timestamp': datetime.utcnow().isoformat()
+            })
+        elif '/analysis' in path:
+            # Return demo analysis results
+            return create_success_response({
+                'mediaId': media_id,
+                'trustScore': 78.5,
+                'deepfakeConfidence': 0.215,
+                'bedrockModels': {
+                    'claudeSonnet': {'confidence': 0.215, 'techniques': ['authentic_indicators'], 'reasoning': 'Demo analysis'},
+                    'claudeHaiku': {'confidence': 0.193, 'techniques': ['consistent_lighting'], 'reasoning': 'Demo analysis'},
+                    'titan': {'confidence': 0.234, 'techniques': ['validation_complete'], 'reasoning': 'Demo analysis'}
+                },
+                'mode': 'demo',
+                'processingTime': 1500
+            })
+        
+        return create_error_response(400, 'Unsupported demo operation')
+        
+    except Exception as e:
+        logger.error(f"Error in demo analysis: {str(e)}")
+        return create_error_response(500, 'Demo analysis failed', str(e))
+
 def store_analysis_results(media_id: str, detection_result: Dict[str, Any]):
     """Store deepfake analysis results in audit table with technique classification."""
     try:
@@ -1474,3 +1535,9 @@ def aggregate_frame_analyses(frame_analyses: List[Dict[str, Any]]) -> Dict[str, 
             'error': str(e),
             'aggregationMethod': 'error_fallback'
         }
+
+def calculate_composite_confidence(confidences: List[float]) -> float:
+    """Calculate composite confidence from multiple sources."""
+    if not confidences:
+        return 0.5
+    return sum(confidences) / len(confidences)
