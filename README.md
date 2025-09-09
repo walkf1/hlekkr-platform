@@ -1,5 +1,3 @@
-### **`README.md` for `hlekkr-platform`**
-
 # 🛡️ Hlekkr - Next-Generation Media Integrity Platform
 
 **🏆 Award-Winning Innovation in AI-Powered Deepfake Detection & Human-AI Collaboration**
