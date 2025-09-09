@@ -19,10 +19,18 @@ async function activateGitHubIntegration() {
     // 1. Set up GitHub token (you'll need to replace with actual token)
     console.log('📝 Setting up GitHub configuration...');
     
-    const githubToken = process.env.GITHUB_TOKEN || 'PLACEHOLDER_TOKEN';
-    if (githubToken === 'PLACEHOLDER_TOKEN') {
-      console.log('⚠️  Please set GITHUB_TOKEN environment variable with your actual GitHub token');
-      console.log('   Example: GITHUB_TOKEN=ghp_your_token_here node activate-github-integration.js');
+    const githubToken = process.env.GITHUB_TOKEN;
+    if (!githubToken || githubToken.length < 20) {
+      console.log('❌ Error: Valid GITHUB_TOKEN environment variable required');
+      console.log('   Generate token at: https://github.com/settings/tokens');
+      console.log('   Required permissions: repo (Contents: read/write)');
+      process.exit(1);
+    }
+    
+    // Validate token format
+    if (!githubToken.match(/^(ghp_|github_pat_)[A-Za-z0-9_]+$/)) {
+      console.log('❌ Error: Invalid GitHub token format');
+      process.exit(1);
     }
     
     await ssmClient.send(new PutParameterCommand({

@@ -87,10 +87,13 @@ export class HlekkrOrgStack extends cdk.Stack {
       }
     });
 
-    // Grant permissions
+    // Grant minimal permissions (principle of least privilege)
     mediaUploadsBucket.grantRead(healthCheckFunction);
     auditTable.grantReadData(healthCheckFunction);
-    mediaUploadsBucket.grantReadWrite(mediaUploadFunction);
+    
+    // Upload function - specific S3 permissions only
+    mediaUploadsBucket.grantPut(mediaUploadFunction);
+    mediaUploadsBucket.grantPutAcl(mediaUploadFunction);
     auditTable.grantWriteData(mediaUploadFunction);
 
     // API Gateway
@@ -101,9 +104,12 @@ export class HlekkrOrgStack extends cdk.Stack {
         types: [apigateway.EndpointType.REGIONAL]
       },
       defaultCorsPreflightOptions: {
-        allowOrigins: apigateway.Cors.ALL_ORIGINS,
+        allowOrigins: process.env.NODE_ENV === 'production' 
+          ? ['https://hlekkr.com', 'https://app.hlekkr.com']
+          : ['http://localhost:3001', 'http://localhost:3000'],
         allowMethods: ['GET', 'POST', 'OPTIONS'],
-        allowHeaders: ['Content-Type', 'X-Amz-Date', 'Authorization', 'X-Api-Key']
+        allowHeaders: ['Content-Type', 'X-Amz-Date', 'Authorization', 'X-Api-Key'],
+        allowCredentials: true
       }
     });
 
