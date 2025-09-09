@@ -77,7 +77,7 @@ export class HlekkrOrgStack extends cdk.Stack {
     const mediaUploadFunction = new lambda.Function(this, 'HlekkrOrgMediaUpload', {
       functionName: `${orgPrefix}-upload-${this.account}-${this.region}`,
       runtime: lambda.Runtime.NODEJS_18_X,
-      handler: 'media-upload.handler',
+      handler: 'simple-upload.handler',
       code: lambda.Code.fromAsset('lambda/api'),
       timeout: cdk.Duration.minutes(5),
       environment: {
