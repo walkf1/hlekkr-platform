@@ -43,13 +43,13 @@ npm install && npm start
 
 ## 🚀 Advanced Testing
 
-### **API Endpoints (Live)**
+### **API Endpoints (Example)**
 ```bash
-# Test status endpoint
-curl "https://17cxuv9v71.execute-api.eu-central-1.amazonaws.com/prod/media/test-123/status"
+# Test status endpoint (replace with your deployed URL)
+curl "https://your-api-gateway-url.amazonaws.com/prod/media/test-123/status"
 
 # Test trust scores
-curl "https://17cxuv9v71.execute-api.eu-central-1.amazonaws.com/prod/trust-scores"
+curl "https://your-api-gateway-url.amazonaws.com/prod/trust-scores"
 ```
 
 ### **Demo vs Production**
