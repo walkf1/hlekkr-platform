@@ -17,34 +17,34 @@ const orgStack = new HlekkrOrgStack(app, 'HlekkrOrgStack', {
   organizationId: 'o-uzpilj07pa'
 });
 
-// Create the MVP stack with core infrastructure
-const mvpStack = new HlekkrMvpStack(app, 'HlekkrMvpStack', {
-  env: { 
-    account: process.env.CDK_DEFAULT_ACCOUNT, 
-    region: process.env.CDK_DEFAULT_REGION 
-  },
-  description: 'Hlekkr MVP Stack - Core infrastructure for deepfake detection and media verification platform',
-  tags: {
-    Project: 'Hlekkr',
-    Environment: 'MVP',
-    Purpose: 'DeepfakeDetection'
-  }
-});
+// // Create the MVP stack with core infrastructure
+// const mvpStack = new HlekkrMvpStack(app, 'HlekkrMvpStack', {
+//   env: { 
+//     account: process.env.CDK_DEFAULT_ACCOUNT, 
+//     region: process.env.CDK_DEFAULT_REGION 
+//   },
+//   description: 'Hlekkr MVP Stack - Core infrastructure for deepfake detection and media verification platform',
+//   tags: {
+//     Project: 'Hlekkr',
+//     Environment: 'MVP',
+//     Purpose: 'DeepfakeDetection'
+//   }
+// });
 
-// Create the Threat Intelligence stack for GitHub integration
-const threatIntelStack = new ThreatIntelligenceStack(app, 'HlekkrThreatIntelligenceStack', {
-  env: { 
-    account: process.env.CDK_DEFAULT_ACCOUNT, 
-    region: process.env.CDK_DEFAULT_REGION 
-  },
-  environment: 'prod',
-  threatIntelligenceTable: mvpStack.auditTable,
-  mediaAnalysisTable: mvpStack.auditTable,
-  reviewDecisionsTable: mvpStack.auditTable
-});
+// // Create the Threat Intelligence stack for GitHub integration
+// const threatIntelStack = new ThreatIntelligenceStack(app, 'HlekkrThreatIntelligenceStack', {
+//   env: { 
+//     account: process.env.CDK_DEFAULT_ACCOUNT, 
+//     region: process.env.CDK_DEFAULT_REGION 
+//   },
+//   environment: 'prod',
+//   threatIntelligenceTable: mvpStack.auditTable,
+//   mediaAnalysisTable: mvpStack.auditTable,
+//   reviewDecisionsTable: mvpStack.auditTable
+// });
 
-// Add dependency
-threatIntelStack.addDependency(mvpStack);
+// // Add dependency
+// threatIntelStack.addDependency(mvpStack);
 
 
 

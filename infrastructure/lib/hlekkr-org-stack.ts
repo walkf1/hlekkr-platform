@@ -3,6 +3,7 @@ import * as s3 from 'aws-cdk-lib/aws-s3';
 import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as apigateway from 'aws-cdk-lib/aws-apigateway';
+import * as iam from 'aws-cdk-lib/aws-iam';
 import * as organizations from 'aws-cdk-lib/aws-organizations';
 import { Construct } from 'constructs';
 
@@ -87,6 +88,18 @@ export class HlekkrOrgStack extends cdk.Stack {
       }
     });
 
+    const demoHitlFunction = new lambda.Function(this, 'HlekkrOrgDemoHitl', {
+      functionName: `${orgPrefix}-demo-hitl-${this.account}-${this.region}`,
+      runtime: lambda.Runtime.NODEJS_18_X,
+      handler: 'demo-hitl-handler.handler',
+      code: lambda.Code.fromAsset('lambda/api'),
+      timeout: cdk.Duration.minutes(2),
+      environment: {
+        ORGANIZATION_ID: props.organizationId,
+        AUDIT_TABLE_NAME: auditTable.tableName
+      }
+    });
+
     // Grant minimal permissions (principle of least privilege)
     mediaUploadsBucket.grantRead(healthCheckFunction);
     auditTable.grantReadData(healthCheckFunction);
@@ -95,6 +108,14 @@ export class HlekkrOrgStack extends cdk.Stack {
     mediaUploadsBucket.grantPut(mediaUploadFunction);
     mediaUploadsBucket.grantPutAcl(mediaUploadFunction);
     auditTable.grantWriteData(mediaUploadFunction);
+    
+    // Demo HITL function permissions
+    auditTable.grantWriteData(demoHitlFunction);
+    demoHitlFunction.addToRolePolicy(new iam.PolicyStatement({
+      effect: iam.Effect.ALLOW,
+      actions: ['ssm:GetParameter'],
+      resources: [`arn:aws:ssm:${this.region}:${this.account}:parameter/hlekkr/prod/github/token`]
+    }));
 
     // API Gateway
     const api = new apigateway.RestApi(this, 'HlekkrOrgApi', {
@@ -137,6 +158,11 @@ export class HlekkrOrgStack extends cdk.Stack {
     
     const abortResource = multipartResource.addResource('abort');
     abortResource.addMethod('POST', new apigateway.LambdaIntegration(mediaUploadFunction));
+    
+    // Demo HITL endpoint
+    const demoResource = api.root.addResource('demo');
+    const hitlResource = demoResource.addResource('hitl');
+    hitlResource.addMethod('POST', new apigateway.LambdaIntegration(demoHitlFunction));
 
     // Outputs
     new cdk.CfnOutput(this, 'OrganizationId', {
