@@ -27,7 +27,42 @@ exports.handler = async (event) => {
       };
     }
 
+    const path = event.path || event.resource;
     const body = JSON.parse(event.body || '{}');
+
+    // Handle multipart initialize
+    if (path.includes('/multipart/initialize')) {
+      const { fileName, fileType } = body;
+      if (!fileName || !fileType) {
+        return {
+          statusCode: 400,
+          headers,
+          body: JSON.stringify({ error: 'fileName and fileType required' })
+        };
+      }
+
+      const mediaId = `media-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+      const s3Key = `uploads/${mediaId}/${fileName}`;
+
+      const createMultipartCommand = new CreateMultipartUploadCommand({
+        Bucket: MEDIA_BUCKET,
+        Key: s3Key,
+        ContentType: fileType
+      });
+
+      const multipartResult = await s3Client.send(createMultipartCommand);
+      
+      return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify({
+          uploadId: multipartResult.UploadId,
+          key: s3Key
+        })
+      };
+    }
+
+    // Handle regular upload
     const { fileName, fileType, fileSize } = body;
 
     if (!fileName || !fileType) {
