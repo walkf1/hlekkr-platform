@@ -100,17 +100,7 @@ export class HlekkrMvpStack extends cdk.Stack {
           maxAge: 3000
         }
       ],
-      intelligentTieringConfigurations: [
-        {
-          id: 'MediaIntelligentTiering',
-          status: s3.IntelligentTieringStatus.ENABLED,
-          prefix: 'uploads/',
-          optionalFields: [
-            s3.IntelligentTieringOptionalFields.BUCKET_KEY_STATUS,
-            s3.IntelligentTieringOptionalFields.STORAGE_CLASS_ANALYSIS
-          ]
-        }
-      ]
+
     });
 
     // Quarantine S3 bucket for suspicious/malicious files
@@ -276,15 +266,15 @@ export class HlekkrMvpStack extends cdk.Stack {
         SECURITY_ALERTS_TOPIC_ARN: this.securityAlertsTopic.topicArn,
         VIRUSTOTAL_API_KEY: '' // Set this via environment variable or parameter store
       },
-      layers: [
-        // Add layer for ClamAV if needed
-        new lambda.LayerVersion(this, 'ClamAVLayer', {
-          layerVersionName: `hlekkr-clamav-layer-${this.account}-${this.region}`,
-          code: lambda.Code.fromAsset('../lambda/layers/clamav'),
-          compatibleRuntimes: [lambda.Runtime.PYTHON_3_9],
-          description: 'ClamAV antivirus scanner layer'
-        })
-      ]
+      // layers: [
+      //   // Add layer for ClamAV if needed
+      //   new lambda.LayerVersion(this, 'ClamAVLayer', {
+      //     layerVersionName: `hlekkr-clamav-layer-${this.account}-${this.region}`,
+      //     code: lambda.Code.fromAsset('../lambda/layers/clamav'),
+      //     compatibleRuntimes: [lambda.Runtime.PYTHON_3_9],
+      //     description: 'ClamAV antivirus scanner layer'
+      //   })
+      // ]
     });
 
     // Media metadata extraction Lambda function
@@ -336,7 +326,7 @@ export class HlekkrMvpStack extends cdk.Stack {
     // Trust Score Calculator Lambda Function
     const trustScoreCalculator = new lambda.Function(this, 'HlekkrTrustScoreCalculator', {
       functionName: `hlekkr-trust-score-calculator-${this.account}-${this.region}`,
-      runtime: lambda.Runtime.PYTHON_3_11,
+      runtime: lambda.Runtime.PYTHON_3_9,
       handler: 'index.handler',
       code: lambda.Code.fromAsset('../lambda/trust_score_calculator'),
       timeout: cdk.Duration.minutes(5),
@@ -356,7 +346,7 @@ export class HlekkrMvpStack extends cdk.Stack {
     // Source Verifier Lambda Function
     const sourceVerifier = new lambda.Function(this, 'HlekkrSourceVerifier', {
       functionName: `hlekkr-source-verifier-${this.account}-${this.region}`,
-      runtime: lambda.Runtime.PYTHON_3_11,
+      runtime: lambda.Runtime.PYTHON_3_9,
       handler: 'index.handler',
       code: lambda.Code.fromAsset('../lambda/source_verifier'),
       timeout: cdk.Duration.minutes(5),
@@ -387,14 +377,14 @@ export class HlekkrMvpStack extends cdk.Stack {
     // KMS Key for chain of custody cryptographic integrity
     const chainOfCustodyKmsKey = new kms.Key(this, 'HlekkrChainOfCustodyKey', {
       description: 'KMS key for Hlekkr chain of custody cryptographic integrity',
-      keyRotation: true,
+      enableKeyRotation: true,
       removalPolicy: cdk.RemovalPolicy.RETAIN
     });
 
     // Chain of Custody Tracker Lambda Function
     const chainOfCustodyTracker = new lambda.Function(this, 'HlekkrChainOfCustodyTracker', {
       functionName: `hlekkr-chain-of-custody-tracker-${this.account}-${this.region}`,
-      runtime: lambda.Runtime.PYTHON_3_11,
+      runtime: lambda.Runtime.PYTHON_3_9,
       handler: 'index.handler',
       code: lambda.Code.fromAsset('../lambda/chain_of_custody'),
       timeout: cdk.Duration.minutes(5),
@@ -434,7 +424,7 @@ export class HlekkrMvpStack extends cdk.Stack {
     // Discrepancy Detection Lambda Function
     const discrepancyDetector = new lambda.Function(this, 'HlekkrDiscrepancyDetector', {
       functionName: `hlekkr-discrepancy-detector-${this.account}-${this.region}`,
-      runtime: lambda.Runtime.PYTHON_3_11,
+      runtime: lambda.Runtime.PYTHON_3_9,
       handler: 'index.handler',
       code: lambda.Code.fromAsset('../lambda/discrepancy_detector'),
       timeout: cdk.Duration.minutes(10),
@@ -531,7 +521,7 @@ export class HlekkrMvpStack extends cdk.Stack {
     // Threat Intelligence Processor Lambda Function
     const threatIntelligenceProcessor = new lambda.Function(this, 'HlekkrThreatIntelligenceProcessor', {
       functionName: `hlekkr-threat-intelligence-processor-${this.account}-${this.region}`,
-      runtime: lambda.Runtime.PYTHON_3_11,
+      runtime: lambda.Runtime.PYTHON_3_9,
       handler: 'index.handler',
       code: lambda.Code.fromAsset('../lambda/threat_intelligence_processor'),
       timeout: cdk.Duration.minutes(15),
@@ -796,7 +786,7 @@ export class HlekkrMvpStack extends cdk.Stack {
     // Workflow orchestrator Lambda function
     const workflowOrchestrator = new lambda.Function(this, 'HlekkrWorkflowOrchestrator', {
       functionName: `hlekkr-workflow-orchestrator-${this.account}-${this.region}`,
-      runtime: lambda.Runtime.PYTHON_3_11,
+      runtime: lambda.Runtime.PYTHON_3_9,
       handler: 'index.handler',
       code: lambda.Code.fromAsset('../lambda/workflow_orchestrator'),
       timeout: cdk.Duration.minutes(5),
@@ -885,14 +875,7 @@ export class HlekkrMvpStack extends cdk.Stack {
       stateMachineName: `hlekkr-media-processing-workflow-${this.account}-${this.region}`,
       definition: workflowDefinition,
       timeout: cdk.Duration.minutes(30),
-      tracingEnabled: true,
-      logs: {
-        destination: new stepfunctions.LogGroup(this, 'HlekkrWorkflowLogGroup', {
-          logGroupName: `/aws/stepfunctions/hlekkr-media-processing-${this.account}-${this.region}`
-        }),
-        level: stepfunctions.LogLevel.ALL,
-        includeExecutionData: true
-      }
+      tracingEnabled: true
     });
 
     // Grant Step Functions permissions to invoke Lambda functions
@@ -1182,7 +1165,7 @@ export class HlekkrMvpStack extends cdk.Stack {
     // Moderator Account Management Lambda Function
     const moderatorAccountManager = new lambda.Function(this, 'HlekkrModeratorAccountManager', {
       functionName: `hlekkr-moderator-account-manager-${this.account}-${this.region}`,
-      runtime: lambda.Runtime.PYTHON_3_11,
+      runtime: lambda.Runtime.PYTHON_3_9,
       handler: 'index.handler',
       code: lambda.Code.fromAsset('../lambda/moderator_account_manager'),
       timeout: cdk.Duration.minutes(5),
@@ -1204,7 +1187,7 @@ export class HlekkrMvpStack extends cdk.Stack {
     // Review Lifecycle Management Lambda Function
     this.reviewLifecycleManager = new lambda.Function(this, 'HlekkrReviewLifecycleManager', {
       functionName: `hlekkr-review-lifecycle-manager-${this.account}-${this.region}`,
-      runtime: lambda.Runtime.PYTHON_3_11,
+      runtime: lambda.Runtime.PYTHON_3_9,
       handler: 'index.handler',
       code: lambda.Code.fromAsset('../lambda/review_lifecycle_manager'),
       timeout: cdk.Duration.minutes(10),
@@ -1238,7 +1221,7 @@ export class HlekkrMvpStack extends cdk.Stack {
     // Review Completion Validator Lambda Function
     this.reviewCompletionValidator = new lambda.Function(this, 'HlekkrReviewCompletionValidator', {
       functionName: `hlekkr-review-completion-validator-${this.account}-${this.region}`,
-      runtime: lambda.Runtime.PYTHON_3_11,
+      runtime: lambda.Runtime.PYTHON_3_9,
       handler: 'index.handler',
       code: lambda.Code.fromAsset('../lambda/review_completion_validator'),
       timeout: cdk.Duration.minutes(5),

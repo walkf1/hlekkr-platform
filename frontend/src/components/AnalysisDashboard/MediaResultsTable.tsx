@@ -33,7 +33,7 @@ const TableContainer = styled.div`
   overflow: hidden;
 `;
 
-const TableHeader = styled.div`
+const TableHeaderDiv = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -94,7 +94,7 @@ const TableRow = styled.tr<{ clickable?: boolean; selected?: boolean }>`
   }
 `;
 
-const TableHeader = styled.th`
+const TableHeaderCell = styled.th`
   padding: 12px 16px;
   text-align: left;
   font-size: 12px;
@@ -310,7 +310,7 @@ export const MediaResultsTable: React.FC<MediaResultsTableProps> = ({
 
   return (
     <TableContainer>
-      <TableHeader>
+      <TableHeaderDiv>
         <TableTitle>Analysis Results ({results.length})</TableTitle>
         <BulkActions visible={selectedItems.size > 0}>
           <span style={{ fontSize: '14px', color: '#6b7280' }}>
@@ -325,24 +325,24 @@ export const MediaResultsTable: React.FC<MediaResultsTableProps> = ({
             Send to Review
           </BulkButton>
         </BulkActions>
-      </TableHeader>
+      </TableHeaderDiv>
 
       <Table>
         <TableHead>
           <TableRow>
-            <TableHeader>
+            <TableHeaderCell>
               <Checkbox
                 type="checkbox"
                 checked={selectAll}
                 onChange={(e) => handleSelectAll(e.target.checked)}
               />
-            </TableHeader>
-            <TableHeader>Media</TableHeader>
-            <TableHeader>Trust Score</TableHeader>
-            <TableHeader>Status</TableHeader>
-            <TableHeader>Human Review</TableHeader>
-            <TableHeader>Analyzed</TableHeader>
-            <TableHeader>Actions</TableHeader>
+            </TableHeaderCell>
+            <TableHeaderCell>Media</TableHeaderCell>
+            <TableHeaderCell>Trust Score</TableHeaderCell>
+            <TableHeaderCell>Status</TableHeaderCell>
+            <TableHeaderCell>Human Review</TableHeaderCell>
+            <TableHeaderCell>Analyzed</TableHeaderCell>
+            <TableHeaderCell>Actions</TableHeaderCell>
           </TableRow>
         </TableHead>
         <tbody>
