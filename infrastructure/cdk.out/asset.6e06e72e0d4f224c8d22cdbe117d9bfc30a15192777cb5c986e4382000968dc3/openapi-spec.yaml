@@ -1,0 +1,1497 @@
+openapi: 3.0.3
+info:
+  title: Hlekkr Media Processing API
+  description: |
+    Comprehensive API for media upload, deepfake detection, trust score calculation, 
+    source verification, chain of custody tracking, and discrepancy detection.
+    
+    ## Authentication
+    All endpoints (except health check) require JWT authentication via the Authorization header:
+    ```
+    Authorization: Bearer <jwt-token>
+    ```
+    
+    ## Rate Limiting
+    API requests are rate limited per user. Rate limit headers are included in responses.
+    
+    ## Error Handling
+    All errors follow a consistent format with correlation IDs for tracking.
+  version: 1.0.0
+  contact:
+    name: Hlekkr API Support
+    email: api-support@hlekkr.com
+  license:
+    name: Proprietary
+    
+servers:
+  - url: https://api.hlekkr.com/v1
+    description: Production server
+  - url: https://staging-api.hlekkr.com/v1
+    description: Staging server
+  - url: https://dev-api.hlekkr.com/v1
+    description: Development server
+
+security:
+  - BearerAuth: []
+
+paths:
+  /health:
+    get:
+      summary: Health Check
+      description: Check the health status of the API and its dependencies
+      operationId: healthCheck
+      security: []
+      tags:
+        - System
+      responses:
+        '200':
+          description: System is healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+        '503':
+          description: System is unhealthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /trust-scores:
+    get:
+      summary: Get Trust Scores
+      description: Retrieve trust scores with optional filtering and statistics
+      operationId: getTrustScores
+      tags:
+        - Trust Scores
+      parameters:
+        - name: scoreRange
+          in: query
+          description: Filter by score range
+          schema:
+            type: string
+            enum: ['0-20', '21-40', '41-60', '61-80', '81-100']
+        - name: startDate
+          in: query
+          description: Start date for filtering (ISO 8601)
+          schema:
+            type: string
+            format: date-time
+        - name: endDate
+          in: query
+          description: End date for filtering (ISO 8601)
+          schema:
+            type: string
+            format: date-time
+        - name: minScore
+          in: query
+          description: Minimum trust score
+          schema:
+            type: number
+            minimum: 0
+            maximum: 100
+        - name: maxScore
+          in: query
+          description: Maximum trust score
+          schema:
+            type: number
+            minimum: 0
+            maximum: 100
+        - name: limit
+          in: query
+          description: Maximum number of results
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+        - name: statistics
+          in: query
+          description: Include statistical summary
+          schema:
+            type: boolean
+            default: false
+        - name: days
+          in: query
+          description: Number of days to look back
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 365
+      responses:
+        '200':
+          description: Trust scores retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrustScoresListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /trust-scores/{mediaId}:
+    get:
+      summary: Get Media Trust Score
+      description: Retrieve trust score for a specific media item
+      operationId: getMediaTrustScore
+      tags:
+        - Trust Scores
+      parameters:
+        - name: mediaId
+          in: path
+          required: true
+          description: Media identifier (UUID)
+          schema:
+            type: string
+            format: uuid
+        - name: history
+          in: query
+          description: Include score history
+          schema:
+            type: boolean
+            default: false
+        - name: limit
+          in: query
+          description: Maximum number of historical records
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 50
+            default: 10
+      responses:
+        '200':
+          description: Trust score retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrustScoreResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalError'
+    
+    post:
+      summary: Calculate Trust Score
+      description: Calculate or recalculate trust score for a media item
+      operationId: calculateTrustScore
+      tags:
+        - Trust Scores
+      parameters:
+        - name: mediaId
+          in: path
+          required: true
+          description: Media identifier (UUID)
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: Trust score calculation options
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CalculateTrustScoreRequest'
+      responses:
+        '200':
+          description: Trust score calculated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrustScoreResponse'
+        '202':
+          description: Trust score calculation started (async)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AsyncOperationResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /source-verification/{mediaId}:
+    post:
+      summary: Verify Media Source
+      description: Perform source verification for a media item
+      operationId: verifySource
+      tags:
+        - Source Verification
+      parameters:
+        - name: mediaId
+          in: path
+          required: true
+          description: Media identifier (UUID)
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: Source verification request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerifySourceRequest'
+      responses:
+        '200':
+          description: Source verification completed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SourceVerificationResponse'
+        '202':
+          description: Source verification started (async)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AsyncOperationResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalError'
+    
+    get:
+      summary: Get Source Verification Results
+      description: Retrieve source verification results for a media item
+      operationId: getSourceVerification
+      tags:
+        - Source Verification
+      parameters:
+        - name: mediaId
+          in: path
+          required: true
+          description: Media identifier (UUID)
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Source verification results retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SourceVerificationResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /chain-of-custody:
+    post:
+      summary: Record Custody Event
+      description: Record a new event in the chain of custody
+      operationId: recordCustodyEvent
+      tags:
+        - Chain of Custody
+      requestBody:
+        required: true
+        description: Custody event details
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecordCustodyEventRequest'
+      responses:
+        '201':
+          description: Custody event recorded successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustodyEventResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /chain-of-custody/{mediaId}:
+    get:
+      summary: Get Custody Chain
+      description: Retrieve the complete chain of custody for a media item
+      operationId: getCustodyChain
+      tags:
+        - Chain of Custody
+      parameters:
+        - name: mediaId
+          in: path
+          required: true
+          description: Media identifier (UUID)
+          schema:
+            type: string
+            format: uuid
+        - name: operation
+          in: query
+          description: Filter by operation type
+          schema:
+            type: string
+            enum: ['upload', 'analysis', 'review', 'approval', 'rejection', 'modification', 'deletion']
+      responses:
+        '200':
+          description: Custody chain retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustodyChainResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /chain-of-custody/{mediaId}/provenance:
+    get:
+      summary: Get Provenance Visualization Data
+      description: Get data for visualizing media provenance and custody chain
+      operationId: getProvenance
+      tags:
+        - Chain of Custody
+      parameters:
+        - name: mediaId
+          in: path
+          required: true
+          description: Media identifier (UUID)
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Provenance data retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProvenanceResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /chain-of-custody/{mediaId}/verify:
+    get:
+      summary: Verify Chain Integrity
+      description: Verify the cryptographic integrity of the custody chain
+      operationId: verifyChainIntegrity
+      tags:
+        - Chain of Custody
+      parameters:
+        - name: mediaId
+          in: path
+          required: true
+          description: Media identifier (UUID)
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Chain integrity verification completed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChainIntegrityResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /discrepancies:
+    post:
+      summary: Detect Discrepancies
+      description: Analyze system data for discrepancies and anomalies
+      operationId: detectDiscrepancies
+      tags:
+        - Discrepancy Detection
+      requestBody:
+        description: Discrepancy detection parameters
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DetectDiscrepanciesRequest'
+      responses:
+        '200':
+          description: Discrepancy analysis completed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DiscrepancyResponse'
+        '202':
+          description: Discrepancy analysis started (async)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AsyncOperationResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalError'
+    
+    get:
+      summary: Get Recent Discrepancies
+      description: Retrieve recently detected discrepancies with filtering
+      operationId: getDiscrepancies
+      tags:
+        - Discrepancy Detection
+      parameters:
+        - name: timeRangeHours
+          in: query
+          description: Time range in hours to look back
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 8760
+            default: 24
+        - name: severityThreshold
+          in: query
+          description: Minimum severity level
+          schema:
+            type: string
+            enum: ['low', 'medium', 'high', 'critical']
+            default: 'medium'
+        - name: limit
+          in: query
+          description: Maximum number of results
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+      responses:
+        '200':
+          description: Discrepancies retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DiscrepancyResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /discrepancies/{mediaId}:
+    post:
+      summary: Analyze Media Discrepancies
+      description: Analyze a specific media item for discrepancies
+      operationId: analyzeMediaDiscrepancies
+      tags:
+        - Discrepancy Detection
+      parameters:
+        - name: mediaId
+          in: path
+          required: true
+          description: Media identifier (UUID)
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Media discrepancy analysis completed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DiscrepancyResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalError'
+    
+    get:
+      summary: Get Media Discrepancies
+      description: Retrieve discrepancies for a specific media item
+      operationId: getMediaDiscrepancies
+      tags:
+        - Discrepancy Detection
+      parameters:
+        - name: mediaId
+          in: path
+          required: true
+          description: Media identifier (UUID)
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Media discrepancies retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DiscrepancyResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /discrepancies/patterns:
+    post:
+      summary: Analyze Suspicious Patterns
+      description: Analyze system-wide patterns for suspicious activity
+      operationId: analyzePatterns
+      tags:
+        - Discrepancy Detection
+      parameters:
+        - name: timeRangeHours
+          in: query
+          description: Time range in hours to analyze
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 8760
+            default: 168
+        - name: minSeverity
+          in: query
+          description: Minimum severity for pattern detection
+          schema:
+            type: string
+            enum: ['low', 'medium', 'high', 'critical']
+            default: 'medium'
+      responses:
+        '200':
+          description: Pattern analysis completed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PatternAnalysisResponse'
+        '202':
+          description: Pattern analysis started (async)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AsyncOperationResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /media:
+    post:
+      summary: Upload Media
+      description: Create a presigned URL for media upload
+      operationId: uploadMedia
+      tags:
+        - Media Upload
+      requestBody:
+        required: true
+        description: Media upload request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UploadMediaRequest'
+      responses:
+        '200':
+          description: Upload URL created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UploadMediaResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '413':
+          $ref: '#/components/responses/PayloadTooLarge'
+        '415':
+          $ref: '#/components/responses/UnsupportedMediaType'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /media/{mediaId}:
+    get:
+      summary: Get Media Information
+      description: Retrieve information about a media item
+      operationId: getMedia
+      tags:
+        - Media Upload
+      parameters:
+        - name: mediaId
+          in: path
+          required: true
+          description: Media identifier (UUID)
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Media information retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MediaInfoResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /media/{mediaId}/analyze:
+    post:
+      summary: Analyze Media
+      description: Trigger deepfake analysis for a media item
+      operationId: analyzeMedia
+      tags:
+        - Media Analysis
+      parameters:
+        - name: mediaId
+          in: path
+          required: true
+          description: Media identifier (UUID)
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Analysis completed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalysisResponse'
+        '202':
+          description: Analysis started (async)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AsyncOperationResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT token obtained from authentication service
+
+  responses:
+    BadRequest:
+      description: Bad request - validation error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    
+    Unauthorized:
+      description: Unauthorized - authentication required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    
+    Forbidden:
+      description: Forbidden - insufficient permissions
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    
+    PayloadTooLarge:
+      description: Payload too large
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    
+    UnsupportedMediaType:
+      description: Unsupported media type
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    
+    InternalError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+
+  schemas:
+    # Base schemas
+    ErrorResponse:
+      type: object
+      required:
+        - success
+        - error
+        - correlationId
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: object
+          required:
+            - message
+            - code
+          properties:
+            message:
+              type: string
+              example: "Validation failed"
+            code:
+              type: integer
+              example: 400
+            errorCode:
+              type: string
+              example: "VALIDATION_ERROR"
+            details:
+              type: object
+            timestamp:
+              type: string
+              format: date-time
+        correlationId:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
+
+    SuccessResponse:
+      type: object
+      required:
+        - success
+        - data
+        - correlationId
+      properties:
+        success:
+          type: boolean
+          example: true
+        data:
+          type: object
+        correlationId:
+          type: string
+          format: uuid
+        timestamp:
+          type: string
+          format: date-time
+
+    AsyncOperationResponse:
+      allOf:
+        - $ref: '#/components/schemas/SuccessResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              required:
+                - operationId
+                - status
+              properties:
+                operationId:
+                  type: string
+                  format: uuid
+                status:
+                  type: string
+                  enum: ['started', 'in_progress']
+                estimatedCompletionTime:
+                  type: string
+                  format: date-time
+
+    # Health check schemas
+    HealthResponse:
+      allOf:
+        - $ref: '#/components/schemas/SuccessResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              required:
+                - status
+                - timestamp
+                - services
+              properties:
+                status:
+                  type: string
+                  enum: ['healthy', 'unhealthy', 'degraded']
+                timestamp:
+                  type: string
+                  format: date-time
+                version:
+                  type: string
+                environment:
+                  type: string
+                services:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      service:
+                        type: string
+                      status:
+                        type: string
+                        enum: ['healthy', 'unhealthy', 'degraded']
+                      responseTime:
+                        type: number
+                      error:
+                        type: string
+
+    # Trust score schemas
+    CalculateTrustScoreRequest:
+      type: object
+      properties:
+        forceRecalculation:
+          type: boolean
+          default: false
+          description: Force recalculation even if recent score exists
+        includeFactors:
+          type: boolean
+          default: true
+          description: Include detailed factor breakdown
+
+    TrustScoreResponse:
+      allOf:
+        - $ref: '#/components/schemas/SuccessResponse'
+        - type: object
+          properties:
+            data:
+              $ref: '#/components/schemas/TrustScore'
+
+    TrustScoresListResponse:
+      allOf:
+        - $ref: '#/components/schemas/SuccessResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                trustScores:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/TrustScore'
+                pagination:
+                  $ref: '#/components/schemas/Pagination'
+                statistics:
+                  $ref: '#/components/schemas/TrustScoreStatistics'
+
+    TrustScore:
+      type: object
+      required:
+        - mediaId
+        - compositeScore
+        - confidence
+        - calculationTimestamp
+      properties:
+        mediaId:
+          type: string
+          format: uuid
+        compositeScore:
+          type: number
+          minimum: 0
+          maximum: 100
+          description: Overall trust score (0-100)
+        confidence:
+          type: string
+          enum: ['low', 'medium', 'high']
+        calculationTimestamp:
+          type: string
+          format: date-time
+        breakdown:
+          type: object
+          properties:
+            deepfakeScore:
+              type: number
+              minimum: 0
+              maximum: 100
+            sourceReliabilityScore:
+              type: number
+              minimum: 0
+              maximum: 100
+            metadataConsistencyScore:
+              type: number
+              minimum: 0
+              maximum: 100
+            historicalPatternScore:
+              type: number
+              minimum: 0
+              maximum: 100
+            technicalIntegrityScore:
+              type: number
+              minimum: 0
+              maximum: 100
+        factors:
+          type: array
+          items:
+            $ref: '#/components/schemas/TrustFactor'
+        recommendations:
+          type: array
+          items:
+            type: string
+
+    TrustFactor:
+      type: object
+      properties:
+        category:
+          type: string
+        impact:
+          type: string
+          enum: ['positive', 'negative', 'neutral']
+        description:
+          type: string
+        weight:
+          type: string
+          enum: ['low', 'medium', 'high']
+
+    TrustScoreStatistics:
+      type: object
+      properties:
+        averageScore:
+          type: number
+        medianScore:
+          type: number
+        scoreDistribution:
+          type: object
+          properties:
+            '0-20':
+              type: integer
+            '21-40':
+              type: integer
+            '41-60':
+              type: integer
+            '61-80':
+              type: integer
+            '81-100':
+              type: integer
+
+    # Source verification schemas
+    VerifySourceRequest:
+      type: object
+      properties:
+        sourceUrl:
+          type: string
+          format: uri
+          description: Original source URL if known
+        sourceMetadata:
+          type: object
+          description: Additional source metadata
+        verificationLevel:
+          type: string
+          enum: ['basic', 'standard', 'comprehensive']
+          default: 'standard'
+
+    SourceVerificationResponse:
+      allOf:
+        - $ref: '#/components/schemas/SuccessResponse'
+        - type: object
+          properties:
+            data:
+              $ref: '#/components/schemas/SourceVerification'
+
+    SourceVerification:
+      type: object
+      required:
+        - mediaId
+        - verificationStatus
+        - verificationTimestamp
+      properties:
+        mediaId:
+          type: string
+          format: uuid
+        verificationStatus:
+          type: string
+          enum: ['verified', 'likely_verified', 'unverified', 'suspicious', 'likely_fake']
+        verificationConfidence:
+          type: number
+          minimum: 0
+          maximum: 1
+        verificationTimestamp:
+          type: string
+          format: date-time
+        sourceReputation:
+          type: string
+          enum: ['excellent', 'high', 'good', 'medium', 'fair', 'poor', 'low', 'blacklisted']
+        reputationHistory:
+          type: object
+          properties:
+            trend:
+              type: string
+              enum: ['improving', 'stable', 'declining']
+            historicalScore:
+              type: number
+              minimum: 0
+              maximum: 100
+        crossReferences:
+          type: array
+          items:
+            type: object
+            properties:
+              source:
+                type: string
+              confidence:
+                type: number
+                minimum: 0
+                maximum: 1
+              timestamp:
+                type: string
+                format: date-time
+
+    # Chain of custody schemas
+    RecordCustodyEventRequest:
+      type: object
+      required:
+        - mediaId
+        - operation
+        - actor
+      properties:
+        mediaId:
+          type: string
+          format: uuid
+        operation:
+          type: string
+          enum: ['upload', 'analysis', 'review', 'approval', 'rejection', 'modification', 'deletion']
+        actor:
+          type: string
+          description: User ID or system component
+        details:
+          type: object
+          description: Operation-specific details
+        signature:
+          type: string
+          description: Cryptographic signature
+
+    CustodyEventResponse:
+      allOf:
+        - $ref: '#/components/schemas/SuccessResponse'
+        - type: object
+          properties:
+            data:
+              $ref: '#/components/schemas/CustodyEvent'
+
+    CustodyChainResponse:
+      allOf:
+        - $ref: '#/components/schemas/SuccessResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              required:
+                - mediaId
+                - events
+                - integrityStatus
+              properties:
+                mediaId:
+                  type: string
+                  format: uuid
+                events:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/CustodyEvent'
+                integrityStatus:
+                  type: string
+                  enum: ['intact', 'compromised', 'unknown']
+                verificationTimestamp:
+                  type: string
+                  format: date-time
+
+    CustodyEvent:
+      type: object
+      required:
+        - eventId
+        - timestamp
+        - operation
+        - actor
+      properties:
+        eventId:
+          type: string
+          format: uuid
+        timestamp:
+          type: string
+          format: date-time
+        operation:
+          type: string
+        actor:
+          type: string
+        details:
+          type: object
+        signature:
+          type: string
+        verified:
+          type: boolean
+
+    ProvenanceResponse:
+      allOf:
+        - $ref: '#/components/schemas/SuccessResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                mediaId:
+                  type: string
+                  format: uuid
+                provenanceGraph:
+                  type: object
+                  description: Graph data for visualization
+                timeline:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/CustodyEvent'
+
+    ChainIntegrityResponse:
+      allOf:
+        - $ref: '#/components/schemas/SuccessResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                mediaId:
+                  type: string
+                  format: uuid
+                integrityStatus:
+                  type: string
+                  enum: ['intact', 'compromised', 'unknown']
+                verificationDetails:
+                  type: object
+                  properties:
+                    totalEvents:
+                      type: integer
+                    verifiedEvents:
+                      type: integer
+                    failedVerifications:
+                      type: array
+                      items:
+                        type: string
+
+    # Discrepancy detection schemas
+    DetectDiscrepanciesRequest:
+      type: object
+      properties:
+        timeRangeHours:
+          type: integer
+          minimum: 1
+          maximum: 8760
+          default: 24
+        severityThreshold:
+          type: string
+          enum: ['low', 'medium', 'high', 'critical']
+          default: 'medium'
+        analysisType:
+          type: string
+          enum: ['full', 'incremental', 'targeted']
+          default: 'incremental'
+
+    DiscrepancyResponse:
+      allOf:
+        - $ref: '#/components/schemas/SuccessResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              required:
+                - discrepancies
+                - analysisTimestamp
+                - summary
+              properties:
+                discrepancies:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Discrepancy'
+                summary:
+                  $ref: '#/components/schemas/DiscrepancySummary'
+                analysisTimestamp:
+                  type: string
+                  format: date-time
+
+    Discrepancy:
+      type: object
+      required:
+        - id
+        - type
+        - severity
+        - description
+        - detectedAt
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+          enum: ['score_inconsistency', 'metadata_mismatch', 'temporal_anomaly', 'source_conflict']
+        severity:
+          type: string
+          enum: ['low', 'medium', 'high', 'critical']
+        description:
+          type: string
+        detectedAt:
+          type: string
+          format: date-time
+        affectedMedia:
+          type: array
+          items:
+            type: string
+            format: uuid
+        details:
+          type: object
+
+    DiscrepancySummary:
+      type: object
+      properties:
+        totalDiscrepancies:
+          type: integer
+        severityBreakdown:
+          type: object
+          properties:
+            low:
+              type: integer
+            medium:
+              type: integer
+            high:
+              type: integer
+            critical:
+              type: integer
+
+    PatternAnalysisResponse:
+      allOf:
+        - $ref: '#/components/schemas/SuccessResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                patterns:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/SuspiciousPattern'
+                analysisTimestamp:
+                  type: string
+                  format: date-time
+
+    SuspiciousPattern:
+      type: object
+      properties:
+        patternId:
+          type: string
+        type:
+          type: string
+        severity:
+          type: string
+          enum: ['low', 'medium', 'high', 'critical']
+        description:
+          type: string
+        affectedMedia:
+          type: array
+          items:
+            type: string
+            format: uuid
+        confidence:
+          type: number
+          minimum: 0
+          maximum: 1
+
+    # Media upload schemas
+    UploadMediaRequest:
+      type: object
+      required:
+        - fileName
+        - fileSize
+        - contentType
+      properties:
+        fileName:
+          type: string
+          minLength: 1
+          maxLength: 255
+          pattern: '^[^<>:"/\\|?*]+$'
+        fileSize:
+          type: integer
+          minimum: 1
+          maximum: 524288000
+        contentType:
+          type: string
+          enum:
+            - 'image/jpeg'
+            - 'image/png'
+            - 'image/gif'
+            - 'image/webp'
+            - 'video/mp4'
+            - 'video/quicktime'
+            - 'video/x-msvideo'
+            - 'video/webm'
+        description:
+          type: string
+          maxLength: 1000
+        tags:
+          type: array
+          items:
+            type: string
+            maxLength: 50
+          maxItems: 10
+        metadata:
+          type: object
+
+    UploadMediaResponse:
+      allOf:
+        - $ref: '#/components/schemas/SuccessResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              required:
+                - mediaId
+                - uploadUrl
+                - expiresIn
+              properties:
+                mediaId:
+                  type: string
+                  format: uuid
+                uploadUrl:
+                  type: string
+                  format: uri
+                s3Key:
+                  type: string
+                expiresIn:
+                  type: integer
+                  description: URL expiration time in seconds
+                maxFileSize:
+                  type: integer
+                contentType:
+                  type: string
+
+    MediaInfoResponse:
+      allOf:
+        - $ref: '#/components/schemas/SuccessResponse'
+        - type: object
+          properties:
+            data:
+              $ref: '#/components/schemas/MediaInfo'
+
+    MediaInfo:
+      type: object
+      properties:
+        mediaId:
+          type: string
+          format: uuid
+        fileName:
+          type: string
+        fileSize:
+          type: integer
+        contentType:
+          type: string
+        status:
+          type: string
+          enum: ['uploading', 'uploaded', 'processing', 'completed', 'failed']
+        uploadedAt:
+          type: string
+          format: date-time
+        description:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        analysisResults:
+          type: object
+
+    AnalysisResponse:
+      allOf:
+        - $ref: '#/components/schemas/SuccessResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                mediaId:
+                  type: string
+                  format: uuid
+                analysisId:
+                  type: string
+                  format: uuid
+                status:
+                  type: string
+                  enum: ['started', 'in_progress', 'completed', 'failed']
+                results:
+                  type: object
+
+    # Utility schemas
+    Pagination:
+      type: object
+      properties:
+        limit:
+          type: integer
+        offset:
+          type: integer
+        total:
+          type: integer
+        hasMore:
+          type: boolean
+
+tags:
+  - name: System
+    description: System health and status endpoints
+  - name: Trust Scores
+    description: Trust score calculation and retrieval
+  - name: Source Verification
+    description: Media source verification and reputation
+  - name: Chain of Custody
+    description: Custody tracking and provenance
+  - name: Discrepancy Detection
+    description: Anomaly and discrepancy detection
+  - name: Media Upload
+    description: Media upload and management
+  - name: Media Analysis
+    description: Deepfake detection and analysis

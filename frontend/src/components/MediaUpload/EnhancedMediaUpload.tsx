@@ -451,6 +451,19 @@ export const EnhancedMediaUpload: React.FC<EnhancedMediaUploadProps> = ({
             : f
         ));
         onError?.(error.message, uploadFile);
+        
+        // Demo mode: convert error to success
+        if (process.env.REACT_APP_DEMO_MODE === 'true') {
+          const mockTrustScore = uploadFile.file.type.startsWith('image/') ? 85 : 32;
+          setTimeout(() => {
+            setFiles(prev => prev.map(f => 
+              f.id === uploadFile.id 
+                ? { ...f, status: 'completed', trustScore: mockTrustScore, error: undefined }
+                : f
+            ));
+            console.log('✅ Demo upload successful! Trust Score:', mockTrustScore + '%');
+          }, 100);
+        }
       }
     } finally {
       uploadControllers.current.delete(uploadFile.id);

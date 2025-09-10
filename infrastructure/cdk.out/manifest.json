@@ -1,0 +1,702 @@
+{
+  "version": "31.0.0",
+  "artifacts": {
+    "HlekkrOrgStack.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "HlekkrOrgStack.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "HlekkrOrgStack": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://970547381359/eu-central-1",
+      "properties": {
+        "templateFile": "HlekkrOrgStack.template.json",
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::970547381359:role/cdk-hnb659fds-deploy-role-970547381359-eu-central-1",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::970547381359:role/cdk-hnb659fds-cfn-exec-role-970547381359-eu-central-1",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-970547381359-eu-central-1/0a381ff39819c22bdad99b999fdada221804d009de195e242239f40e0226bf4c.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "HlekkrOrgStack.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::970547381359:role/cdk-hnb659fds-lookup-role-970547381359-eu-central-1",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "HlekkrOrgStack.assets"
+      ],
+      "metadata": {
+        "/HlekkrOrgStack/HlekkrOrgMediaUploads/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgMediaUploadsB5DDB223"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgAuditTable": [
+          {
+            "type": "aws:cdk:hasPhysicalName",
+            "data": {
+              "Ref": "HlekkrOrgAuditTableB7A6643E"
+            }
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgAuditTable/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgAuditTableB7A6643E"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgHealthCheck/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgHealthCheckServiceRole4B09DF0C"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgHealthCheck/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgHealthCheckServiceRoleDefaultPolicyECC353EB"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgHealthCheck/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgHealthCheck38B3C60D"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgMediaUpload/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgMediaUploadServiceRole69FA62F0"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgMediaUpload/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgMediaUploadServiceRoleDefaultPolicy50B58DA7"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgMediaUpload/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgMediaUploadE3904452"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgDemoHitl/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgDemoHitlServiceRole8C9ED9D9"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgDemoHitl/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgDemoHitlServiceRoleDefaultPolicyCCB8CD25"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgDemoHitl/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgDemoHitl63FBB513"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgDeepfakeDetector/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgDeepfakeDetectorServiceRole78717567"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgDeepfakeDetector/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgDeepfakeDetectorServiceRoleDefaultPolicy148D7461"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgDeepfakeDetector/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgDeepfakeDetector614BEA73"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApi0016556E"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/CloudWatchRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApiCloudWatchRole6F92F4E3"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Account": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApiAccountE61D7C1A"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Deployment/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApiDeployment81470331df12250317db13a12700fb5c844978ca"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/DeploymentStage.prod/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApiDeploymentStageprodF70D0D5C"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Endpoint": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApiEndpoint0ADE38F4"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApiOPTIONS2D4AAF9B"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/health/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApihealth6D28A3AF"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/health/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApihealthOPTIONS8DB35F23"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/health/GET/ApiPermission.HlekkrOrgStackHlekkrOrgApiD4F34836.GET..health": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApihealthGETApiPermissionHlekkrOrgStackHlekkrOrgApiD4F34836GEThealth6AC7431C"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/health/GET/ApiPermission.Test.HlekkrOrgStackHlekkrOrgApiD4F34836.GET..health": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApihealthGETApiPermissionTestHlekkrOrgStackHlekkrOrgApiD4F34836GEThealthAA09329F"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/health/GET/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApihealthGETCA743EA6"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/upload/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApiuploadBBF748A9"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/upload/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApiuploadOPTIONSA767158F"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/upload/POST/ApiPermission.HlekkrOrgStackHlekkrOrgApiD4F34836.POST..upload": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApiuploadPOSTApiPermissionHlekkrOrgStackHlekkrOrgApiD4F34836POSTupload5E50542A"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/upload/POST/ApiPermission.Test.HlekkrOrgStackHlekkrOrgApiD4F34836.POST..upload": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApiuploadPOSTApiPermissionTestHlekkrOrgStackHlekkrOrgApiD4F34836POSTupload3CEFC187"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/upload/POST/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApiuploadPOST336EE143"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/upload/presigned-url/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApiuploadpresignedurl66199DC5"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/upload/presigned-url/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApiuploadpresignedurlOPTIONS28BE6788"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/upload/presigned-url/POST/ApiPermission.HlekkrOrgStackHlekkrOrgApiD4F34836.POST..upload.presigned-url": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApiuploadpresignedurlPOSTApiPermissionHlekkrOrgStackHlekkrOrgApiD4F34836POSTuploadpresignedurlB24C4558"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/upload/presigned-url/POST/ApiPermission.Test.HlekkrOrgStackHlekkrOrgApiD4F34836.POST..upload.presigned-url": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApiuploadpresignedurlPOSTApiPermissionTestHlekkrOrgStackHlekkrOrgApiD4F34836POSTuploadpresignedurl30AE5E01"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/upload/presigned-url/POST/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApiuploadpresignedurlPOST9DB3C1F8"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/upload/complete/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApiuploadcompleteA1654272"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/upload/complete/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApiuploadcompleteOPTIONSE1F358EA"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/upload/complete/POST/ApiPermission.HlekkrOrgStackHlekkrOrgApiD4F34836.POST..upload.complete": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApiuploadcompletePOSTApiPermissionHlekkrOrgStackHlekkrOrgApiD4F34836POSTuploadcompleteBCB47FF3"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/upload/complete/POST/ApiPermission.Test.HlekkrOrgStackHlekkrOrgApiD4F34836.POST..upload.complete": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApiuploadcompletePOSTApiPermissionTestHlekkrOrgStackHlekkrOrgApiD4F34836POSTuploadcomplete9286E271"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/upload/complete/POST/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApiuploadcompletePOSTA44D769A"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/upload/multipart/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApiuploadmultipart5208A3CF"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/upload/multipart/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApiuploadmultipartOPTIONS8B0BB3A1"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/upload/multipart/initialize/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApiuploadmultipartinitialize02434CCA"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/upload/multipart/initialize/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApiuploadmultipartinitializeOPTIONS1F9649AB"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/upload/multipart/initialize/POST/ApiPermission.HlekkrOrgStackHlekkrOrgApiD4F34836.POST..upload.multipart.initialize": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApiuploadmultipartinitializePOSTApiPermissionHlekkrOrgStackHlekkrOrgApiD4F34836POSTuploadmultipartinitializeDC8F9966"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/upload/multipart/initialize/POST/ApiPermission.Test.HlekkrOrgStackHlekkrOrgApiD4F34836.POST..upload.multipart.initialize": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApiuploadmultipartinitializePOSTApiPermissionTestHlekkrOrgStackHlekkrOrgApiD4F34836POSTuploadmultipartinitialize76CC83C6"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/upload/multipart/initialize/POST/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApiuploadmultipartinitializePOST303679FF"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/upload/multipart/urls/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApiuploadmultiparturlsE1E1C08C"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/upload/multipart/urls/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApiuploadmultiparturlsOPTIONSFD0F0FC0"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/upload/multipart/urls/POST/ApiPermission.HlekkrOrgStackHlekkrOrgApiD4F34836.POST..upload.multipart.urls": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApiuploadmultiparturlsPOSTApiPermissionHlekkrOrgStackHlekkrOrgApiD4F34836POSTuploadmultiparturlsEC2632ED"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/upload/multipart/urls/POST/ApiPermission.Test.HlekkrOrgStackHlekkrOrgApiD4F34836.POST..upload.multipart.urls": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApiuploadmultiparturlsPOSTApiPermissionTestHlekkrOrgStackHlekkrOrgApiD4F34836POSTuploadmultiparturls914DA6BE"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/upload/multipart/urls/POST/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApiuploadmultiparturlsPOSTBCCE8C64"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/upload/multipart/complete/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApiuploadmultipartcomplete55543A86"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/upload/multipart/complete/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApiuploadmultipartcompleteOPTIONS6C21642B"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/upload/multipart/complete/POST/ApiPermission.HlekkrOrgStackHlekkrOrgApiD4F34836.POST..upload.multipart.complete": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApiuploadmultipartcompletePOSTApiPermissionHlekkrOrgStackHlekkrOrgApiD4F34836POSTuploadmultipartcomplete2EC19D06"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/upload/multipart/complete/POST/ApiPermission.Test.HlekkrOrgStackHlekkrOrgApiD4F34836.POST..upload.multipart.complete": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApiuploadmultipartcompletePOSTApiPermissionTestHlekkrOrgStackHlekkrOrgApiD4F34836POSTuploadmultipartcomplete8F1B13E3"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/upload/multipart/complete/POST/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApiuploadmultipartcompletePOST892BDF30"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/upload/multipart/abort/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApiuploadmultipartabort47DFA0B1"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/upload/multipart/abort/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApiuploadmultipartabortOPTIONSE769831D"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/upload/multipart/abort/POST/ApiPermission.HlekkrOrgStackHlekkrOrgApiD4F34836.POST..upload.multipart.abort": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApiuploadmultipartabortPOSTApiPermissionHlekkrOrgStackHlekkrOrgApiD4F34836POSTuploadmultipartabort19BFD943"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/upload/multipart/abort/POST/ApiPermission.Test.HlekkrOrgStackHlekkrOrgApiD4F34836.POST..upload.multipart.abort": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApiuploadmultipartabortPOSTApiPermissionTestHlekkrOrgStackHlekkrOrgApiD4F34836POSTuploadmultipartabort9427B052"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/upload/multipart/abort/POST/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApiuploadmultipartabortPOST90C86B16"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/demo/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApidemo777E5D7E"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/demo/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApidemoOPTIONS06CF5491"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/demo/hitl/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApidemohitl137EE591"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/demo/hitl/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApidemohitlOPTIONSB6F587DC"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/demo/hitl/POST/ApiPermission.HlekkrOrgStackHlekkrOrgApiD4F34836.POST..demo.hitl": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApidemohitlPOSTApiPermissionHlekkrOrgStackHlekkrOrgApiD4F34836POSTdemohitl75C4AD1B"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/demo/hitl/POST/ApiPermission.Test.HlekkrOrgStackHlekkrOrgApiD4F34836.POST..demo.hitl": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApidemohitlPOSTApiPermissionTestHlekkrOrgStackHlekkrOrgApiD4F34836POSTdemohitlDBB0C86F"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/demo/hitl/POST/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApidemohitlPOST83BD0245"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/media/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApimediaEBB9E47E"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/media/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApimediaOPTIONS8A5A97CC"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/media/{mediaId}/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApimediamediaIdABAB2D08"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/media/{mediaId}/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApimediamediaIdOPTIONS65F6F15A"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/media/{mediaId}/analyze/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApimediamediaIdanalyze0BC964CA"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/media/{mediaId}/analyze/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApimediamediaIdanalyzeOPTIONS8657D41D"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/media/{mediaId}/analyze/POST/ApiPermission.HlekkrOrgStackHlekkrOrgApiD4F34836.POST..media.{mediaId}.analyze": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApimediamediaIdanalyzePOSTApiPermissionHlekkrOrgStackHlekkrOrgApiD4F34836POSTmediamediaIdanalyzeC2835A6B"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/media/{mediaId}/analyze/POST/ApiPermission.Test.HlekkrOrgStackHlekkrOrgApiD4F34836.POST..media.{mediaId}.analyze": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApimediamediaIdanalyzePOSTApiPermissionTestHlekkrOrgStackHlekkrOrgApiD4F34836POSTmediamediaIdanalyze30ACD80E"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/media/{mediaId}/analyze/POST/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApimediamediaIdanalyzePOST18C48485"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/media/{mediaId}/status/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApimediamediaIdstatusAA0CB8F8"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/media/{mediaId}/status/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApimediamediaIdstatusOPTIONS8C12C31B"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/media/{mediaId}/status/GET/ApiPermission.HlekkrOrgStackHlekkrOrgApiD4F34836.GET..media.{mediaId}.status": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApimediamediaIdstatusGETApiPermissionHlekkrOrgStackHlekkrOrgApiD4F34836GETmediamediaIdstatusC2CAB7FE"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/media/{mediaId}/status/GET/ApiPermission.Test.HlekkrOrgStackHlekkrOrgApiD4F34836.GET..media.{mediaId}.status": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApimediamediaIdstatusGETApiPermissionTestHlekkrOrgStackHlekkrOrgApiD4F34836GETmediamediaIdstatus74834EDC"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/media/{mediaId}/status/GET/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApimediamediaIdstatusGET8F3D346E"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/media/{mediaId}/analysis/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApimediamediaIdanalysis13C631C3"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/media/{mediaId}/analysis/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApimediamediaIdanalysisOPTIONS48C60ED9"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/media/{mediaId}/analysis/GET/ApiPermission.HlekkrOrgStackHlekkrOrgApiD4F34836.GET..media.{mediaId}.analysis": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApimediamediaIdanalysisGETApiPermissionHlekkrOrgStackHlekkrOrgApiD4F34836GETmediamediaIdanalysisA5F9B9D1"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/media/{mediaId}/analysis/GET/ApiPermission.Test.HlekkrOrgStackHlekkrOrgApiD4F34836.GET..media.{mediaId}.analysis": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApimediamediaIdanalysisGETApiPermissionTestHlekkrOrgStackHlekkrOrgApiD4F34836GETmediamediaIdanalysis7EF3D458"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/media/{mediaId}/analysis/GET/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApimediamediaIdanalysisGETE637F7F4"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/trust-scores/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApitrustscores4C6A3552"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/trust-scores/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApitrustscoresOPTIONS266FE02F"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/trust-scores/{mediaId}/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApitrustscoresmediaId18F8CAFF"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/trust-scores/{mediaId}/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApitrustscoresmediaIdOPTIONSA3D64140"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/trust-scores/{mediaId}/GET/ApiPermission.HlekkrOrgStackHlekkrOrgApiD4F34836.GET..trust-scores.{mediaId}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApitrustscoresmediaIdGETApiPermissionHlekkrOrgStackHlekkrOrgApiD4F34836GETtrustscoresmediaId54FDED3A"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/trust-scores/{mediaId}/GET/ApiPermission.Test.HlekkrOrgStackHlekkrOrgApiD4F34836.GET..trust-scores.{mediaId}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApitrustscoresmediaIdGETApiPermissionTestHlekkrOrgStackHlekkrOrgApiD4F34836GETtrustscoresmediaIdE760509F"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/trust-scores/{mediaId}/GET/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApitrustscoresmediaIdGETFFF18232"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/trust-scores/{mediaId}/POST/ApiPermission.HlekkrOrgStackHlekkrOrgApiD4F34836.POST..trust-scores.{mediaId}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApitrustscoresmediaIdPOSTApiPermissionHlekkrOrgStackHlekkrOrgApiD4F34836POSTtrustscoresmediaId959FD225"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/trust-scores/{mediaId}/POST/ApiPermission.Test.HlekkrOrgStackHlekkrOrgApiD4F34836.POST..trust-scores.{mediaId}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApitrustscoresmediaIdPOSTApiPermissionTestHlekkrOrgStackHlekkrOrgApiD4F34836POSTtrustscoresmediaId771227AF"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/trust-scores/{mediaId}/POST/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApitrustscoresmediaIdPOST7EB66417"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/trust-scores/GET/ApiPermission.HlekkrOrgStackHlekkrOrgApiD4F34836.GET..trust-scores": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApitrustscoresGETApiPermissionHlekkrOrgStackHlekkrOrgApiD4F34836GETtrustscoresBCA1D110"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/trust-scores/GET/ApiPermission.Test.HlekkrOrgStackHlekkrOrgApiD4F34836.GET..trust-scores": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApitrustscoresGETApiPermissionTestHlekkrOrgStackHlekkrOrgApiD4F34836GETtrustscores2F942F2F"
+          }
+        ],
+        "/HlekkrOrgStack/HlekkrOrgApi/Default/trust-scores/GET/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HlekkrOrgApitrustscoresGET07E033CE"
+          }
+        ],
+        "/HlekkrOrgStack/OrganizationId": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "OrganizationId"
+          }
+        ],
+        "/HlekkrOrgStack/ApiUrl": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiUrl"
+          }
+        ],
+        "/HlekkrOrgStack/MediaBucketName": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MediaBucketName"
+          }
+        ],
+        "/HlekkrOrgStack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/HlekkrOrgStack/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/HlekkrOrgStack/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "HlekkrOrgStack"
+    },
+    "Tree": {
+      "type": "cdk:tree",
+      "properties": {
+        "file": "tree.json"
+      }
+    }
+  }
+}

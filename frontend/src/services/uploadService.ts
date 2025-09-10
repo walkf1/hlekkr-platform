@@ -70,6 +70,15 @@ export class UploadService {
    * Get presigned URL for simple upload (small files)
    */
   async getPresignedUrl(fileName: string, fileType: string): Promise<PresignedUrlResponse> {
+    // Security: Default to demo mode if no valid API configuration
+    if (process.env.REACT_APP_DEMO_MODE === 'true' || 
+        !process.env.REACT_APP_API_BASE_URL || 
+        !process.env.REACT_APP_API_KEY ||
+        process.env.REACT_APP_API_BASE_URL === '' ||
+        process.env.REACT_APP_API_KEY === '') {
+      throw new Error('Demo mode: API unavailable');
+    }
+    
     try {
       const response = await axios.post(`${this.config.apiEndpoint}/upload/presigned-url`, {
         fileName,
