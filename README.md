@@ -52,6 +52,9 @@ MIT License - see LICENSE file for details.
 
 ## 🤝 Contributing
 
+**Note**: This repository is currently under competition evaluation. Contributions will be welcomed after October 20, 2025.
+
+For post-evaluation contributions:
 1. Fork the repository
 2. Create feature branch
 3. Test in demo mode
