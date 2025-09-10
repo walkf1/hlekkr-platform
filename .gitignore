@@ -79,6 +79,12 @@ jspm_packages/
 # Serverless directories
 .serverless
 
+# CDK build outputs (SECURITY: Contains infrastructure templates)
+infrastructure/cdk.out/
+infrastructure/node_modules/
+infrastructure/*.js
+infrastructure/*.d.ts
+
 # FuseBox cache
 .fusebox/
 
