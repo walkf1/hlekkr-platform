@@ -99,7 +99,7 @@ export class HlekkrApiGatewayStack extends cdk.Stack {
   private createLambdaFunctions(environment: string): void {
     // Common Lambda configuration
     const commonProps = {
-      runtime: lambda.Runtime.NODEJS_18_X,
+      runtime: lambda.Runtime.NODEJS_20_X,
       timeout: cdk.Duration.minutes(5),
       memorySize: 1024,
       environment: {

@@ -1261,7 +1261,7 @@ export class HlekkrMvpStack extends cdk.Stack {
     // Rate Limiting Monitor Lambda Function
     const rateLimitMonitor = new lambda.Function(this, 'HlekkrRateLimitMonitor', {
       functionName: `hlekkr-rate-limit-monitor-${this.account}-${this.region}`,
-      runtime: lambda.Runtime.NODEJS_18_X,
+      runtime: lambda.Runtime.NODEJS_20_X,
       handler: 'rate-limit-monitor.handler',
       code: lambda.Code.fromAsset('../lambda/monitoring'),
       timeout: cdk.Duration.minutes(5),

@@ -48,7 +48,7 @@ export class HlekkrOrgStack extends cdk.Stack {
     // Lambda functions
     const healthCheckFunction = new lambda.Function(this, 'HlekkrOrgHealthCheck', {
       functionName: `${orgPrefix}-health-${this.account}-${this.region}`,
-      runtime: lambda.Runtime.NODEJS_18_X,
+      runtime: lambda.Runtime.NODEJS_20_X,
       handler: 'index.handler',
       code: lambda.Code.fromInline(`
         exports.handler = async (event) => {
@@ -78,7 +78,7 @@ export class HlekkrOrgStack extends cdk.Stack {
 
     const mediaUploadFunction = new lambda.Function(this, 'HlekkrOrgMediaUpload', {
       functionName: `${orgPrefix}-upload-${this.account}-${this.region}`,
-      runtime: lambda.Runtime.NODEJS_18_X,
+      runtime: lambda.Runtime.NODEJS_20_X,
       handler: 'simple-upload.handler',
       code: lambda.Code.fromAsset('lambda/api'),
       timeout: cdk.Duration.minutes(5),
@@ -91,7 +91,7 @@ export class HlekkrOrgStack extends cdk.Stack {
 
     const demoHitlFunction = new lambda.Function(this, 'HlekkrOrgDemoHitl', {
       functionName: `${orgPrefix}-demo-hitl-${this.account}-${this.region}`,
-      runtime: lambda.Runtime.NODEJS_18_X,
+      runtime: lambda.Runtime.NODEJS_20_X,
       handler: 'demo-hitl-handler.handler',
       code: lambda.Code.fromAsset('lambda/api'),
       timeout: cdk.Duration.minutes(2),

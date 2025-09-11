@@ -76,7 +76,7 @@ export class ThreatIntelligenceStack extends cdk.Stack {
     // Lambda function for threat report generation
     this.threatReportGenerator = new lambda.Function(this, 'ThreatReportGenerator', {
       functionName: `hlekkr-${props.environment}-threat-report-generator`,
-      runtime: lambda.Runtime.NODEJS_18_X,
+      runtime: lambda.Runtime.NODEJS_20_X,
       handler: 'index.handler',
       code: lambda.Code.fromAsset('lambda/threat-report-generator'),
       timeout: cdk.Duration.minutes(15),
@@ -370,7 +370,7 @@ export class GitHubWebhookConstruct extends Construct {
     // Lambda function for handling GitHub webhooks
     this.webhookFunction = new lambda.Function(this, 'GitHubWebhookHandler', {
       functionName: `hlekkr-${props.environment}-github-webhook`,
-      runtime: lambda.Runtime.NODEJS_18_X,
+      runtime: lambda.Runtime.NODEJS_20_X,
       handler: 'webhook.handler',
       code: lambda.Code.fromInline(`
         exports.handler = async (event) => {

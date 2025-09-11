@@ -22,7 +22,7 @@ export class AuthStack extends cdk.Stack {
 
     // Pre-signup Lambda trigger for custom validation
     const preSignupTrigger = new lambda.Function(this, 'PreSignupTrigger', {
-      runtime: lambda.Runtime.NODEJS_18_X,
+      runtime: lambda.Runtime.NODEJS_20_X,
       handler: 'index.handler',
       code: lambda.Code.fromInline(`
         exports.handler = async (event) => {
@@ -59,7 +59,7 @@ export class AuthStack extends cdk.Stack {
 
     // Post-confirmation Lambda trigger for user setup
     const postConfirmationTrigger = new lambda.Function(this, 'PostConfirmationTrigger', {
-      runtime: lambda.Runtime.NODEJS_18_X,
+      runtime: lambda.Runtime.NODEJS_20_X,
       handler: 'index.handler',
       code: lambda.Code.fromInline(`
         const AWS = require('aws-sdk');
