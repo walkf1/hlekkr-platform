@@ -340,8 +340,8 @@ We follow [Semantic Versioning](https://semver.org/):
 - **Documentation**: Check our comprehensive docs first
 
 ### Maintainer Contact
-- **Email**: maintainers@hlekkr.com
-- **Security Issues**: security@hlekkr.com (for security vulnerabilities)
+- **Email**: hello@frthst.com
+- **Security Issues**: For any security vulnerabilities, please email hello@frthst.com directly with "HLEKKR SECURITY" in the subject line.
 
 ## 📜 Code of Conduct
 
