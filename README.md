@@ -4,7 +4,7 @@
 
 **🏆 Code with Kiro Hackathon & Research Project - Open Source Media Verification**
 
-⚠️ **IMPORTANT**: This is a research project and hackathon submission. Deploying this platform to your own AWS account will incur costs. Please see the "Quick Start" section for details on running in the free, zero-cost **Demo Mode**.
+⚠️ **IMPORTANT**: Deploying this platform to your own AWS account will incur costs. Please see the "Quick Start" section for details on running in the free, zero-cost **Demo Mode**.
 
 Hlekkr revolutionizes media verification through cutting-edge AI analysis, intelligent human-in-the-loop workflows, and immutable audit trails. Our platform combines Amazon Bedrock's advanced foundation models with innovative human expertise integration to deliver unparalleled media authenticity verification.
 
