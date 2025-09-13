@@ -1,3 +1,4 @@
+# Copyright (C) 2025 Frthst
 -----
 
 # 🛡️ Hlekkr - Next-Generation Media Integrity Platform
