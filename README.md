@@ -8,7 +8,7 @@
 
 Hlekkr revolutionizes media verification through cutting-edge AI analysis, intelligent human-in-the-loop workflows, and immutable audit trails. Our platform combines Amazon Bedrock's advanced foundation models with innovative human expertise integration to deliver unparalleled media authenticity verification.
 
-## About This Repository (Kiro Hackathon Submission)
+## About This Repository (Code with Kiro Hackathon Submission)
 
 This repository contains the source code for the "Hlekkr" platform, submitted for the 2025 Code with Kiro Hackathon.
 
