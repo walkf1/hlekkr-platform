@@ -21,7 +21,7 @@ The original, pre-transformation 'G.R.A.C.E.' repository can be viewed for histo
 ### 🤖 The Trust Engine: From Black Box to Verifiable Insight
 
   * **Bedrock Integration:** Leverages an ensemble of state-of-the-art foundation models, including **Claude 3 Sonnet, Claude 3 Haiku, and Amazon Titan**, for deepfake detection.
-  * **Trust Score Calculation Engine:** A proprietary, weighted algorithm that synthesizes multiple components into a single, human-readable A+ to F grade.
+  * **Trust Score Calculation Engine:** A proprietary, weighted algorithm that synthesizes multiple components into a single, human-readable 0-100 numerical score with descriptive confidence levels (high/medium/low)
   * **Immutable Audit Trail:** Use of S3 Object Lock to ensure all analysis and decision records are tamper-proof and verifiable.
 
 ### 🤝 Human-AI Collaboration & Governance
