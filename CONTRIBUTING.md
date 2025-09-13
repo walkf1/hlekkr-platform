@@ -357,7 +357,7 @@ Examples of behavior that contributes to creating a positive environment include
 - Showing empathy towards other community members
 
 ### Enforcement
-Instances of abusive, harassing, or otherwise unacceptable behavior may be reported by contacting the project team at conduct@hlekkr.com.
+Instances of abusive, harassing, or otherwise unacceptable behavior may be reported by contacting the project team at hello@frthst.com.
 
 ## 🙏 Recognition
 
