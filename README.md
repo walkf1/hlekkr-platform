@@ -1,7 +1,7 @@
 -----
 
 # 🛡️ Hlekkr - Next-Generation Media Integrity Platform 
-**Copyright © 2025 of Frthst. All rights reserved**
+**Copyright © 2025 Frthst. All rights reserved**
 
 **🏆 Code with Kiro Hackathon & Research Project - Open Source Media Verification**
 
