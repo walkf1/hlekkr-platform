@@ -1,7 +1,7 @@
 -----
 
-# 🛡️ Hlekkr - Next-Generation Media Integrity Platform © 2025 of Frthst. All rights reserved.
-
+# 🛡️ Hlekkr - Next-Generation Media Integrity Platform 
+**© 2025 of Frthst. All rights reserved**
 **🏆 Code with Kiro Hackathon & Research Project - Open Source Media Verification**
 
 ⚠️ **IMPORTANT**: Deploying this platform to your own AWS account will incur costs. Please see the "Quick Start" section for details on running in the free, zero-cost **Demo Mode**.
