@@ -340,8 +340,8 @@ We follow [Semantic Versioning](https://semver.org/):
 - **Documentation**: Check our comprehensive docs first
 
 ### Maintainer Contact
-- **Email**: maintainers@hlekkr.com
-- **Security Issues**: security@hlekkr.com (for security vulnerabilities)
+- **Email**: hello@frthst.com
+- **Security Issues**: For any security vulnerabilities, please email hello@frthst.com directly with "HLEKKR SECURITY" in the subject line.
 
 ## 📜 Code of Conduct
 
@@ -357,7 +357,7 @@ Examples of behavior that contributes to creating a positive environment include
 - Showing empathy towards other community members
 
 ### Enforcement
-Instances of abusive, harassing, or otherwise unacceptable behavior may be reported by contacting the project team at conduct@hlekkr.com.
+Instances of abusive, harassing, or otherwise unacceptable behavior may be reported by contacting the project team at hello@frthst.com.
 
 ## 🙏 Recognition
 
