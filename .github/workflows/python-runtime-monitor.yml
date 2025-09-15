@@ -1,0 +1,65 @@
+name: Python Runtime Monitor
+
+on:
+  schedule:
+    - cron: '0 9 1 * *'  # Monthly on 1st at 9 AM
+  workflow_dispatch:
+
+jobs:
+  check-python-runtime:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          
+      - name: Install dependencies
+        run: |
+          cd infrastructure
+          npm ci
+          
+      - name: Check CDK Python runtimes
+        run: |
+          cd infrastructure
+          echo "Available Python runtimes:"
+          node -e "
+            const cdk = require('aws-cdk-lib');
+            const pythonRuntimes = Object.keys(cdk.aws_lambda.Runtime)
+              .filter(k => k.includes('PYTHON'))
+              .sort();
+            console.log(pythonRuntimes.join('\n'));
+            
+            if (pythonRuntimes.includes('PYTHON_3_12')) {
+              console.log('\n✅ PYTHON_3_12 available - upgrade recommended');
+              process.exit(1);
+            } else {
+              console.log('\n⏳ PYTHON_3_12 not yet available');
+            }
+          "
+          
+      - name: Create upgrade issue
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: '🚨 Python 3.12 Runtime Available - Upgrade Required',
+              body: `
+              ## Python 3.12 Runtime Now Available
+              
+              CDK now supports Python 3.12 runtime. Upgrade required before Python 3.9 end-of-support.
+              
+              **Action Required:**
+              1. Update Lambda runtimes: \`PYTHON_3_9\` → \`PYTHON_3_12\`
+              2. Test functions with new runtime
+              3. Deploy updated stacks
+              
+              **Deadline:** December 15, 2025
+              `,
+              labels: ['urgent', 'infrastructure', 'python-upgrade']
+            });
