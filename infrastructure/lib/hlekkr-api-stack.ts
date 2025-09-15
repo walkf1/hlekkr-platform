@@ -46,7 +46,7 @@ export class HlekkrApiStack extends cdk.Stack {
     // Deepfake detection Lambda function
     const deepfakeDetector = new lambda.Function(this, 'DeepfakeDetector', {
       functionName: `hlekkr-deepfake-detector-${this.account}-${this.region}`,
-      runtime: lambda.Runtime.PYTHON_3_9,
+      runtime: lambda.Runtime.PYTHON_3_12,
       handler: 'index.handler',
       code: lambda.Code.fromAsset('../lambda/deepfake_detector'),
       timeout: cdk.Duration.minutes(10),
@@ -60,7 +60,7 @@ export class HlekkrApiStack extends cdk.Stack {
     // Trust score calculator Lambda function
     const trustScoreCalculator = new lambda.Function(this, 'TrustScoreCalculator', {
       functionName: `hlekkr-trust-score-calculator-${this.account}-${this.region}`,
-      runtime: lambda.Runtime.PYTHON_3_9,
+      runtime: lambda.Runtime.PYTHON_3_12,
       handler: 'index.handler',
       code: lambda.Code.fromAsset('../lambda/trust_score_calculator'),
       timeout: cdk.Duration.minutes(5),
@@ -74,7 +74,7 @@ export class HlekkrApiStack extends cdk.Stack {
     // Review workflow trigger Lambda function
     const reviewWorkflowTrigger = new lambda.Function(this, 'ReviewWorkflowTrigger', {
       functionName: `hlekkr-review-workflow-trigger-${this.account}-${this.region}`,
-      runtime: lambda.Runtime.PYTHON_3_9,
+      runtime: lambda.Runtime.PYTHON_3_12,
       handler: 'index.handler',
       code: lambda.Code.fromAsset('../lambda/review_workflow_trigger'),
       timeout: cdk.Duration.minutes(3),

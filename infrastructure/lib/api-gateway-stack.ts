@@ -99,7 +99,7 @@ export class HlekkrApiGatewayStack extends cdk.Stack {
   private createLambdaFunctions(environment: string): void {
     // Common Lambda configuration
     const commonProps = {
-      runtime: lambda.Runtime.NODEJS_20_X,
+      runtime: lambda.Runtime.NODEJS_18_X,
       timeout: cdk.Duration.minutes(5),
       memorySize: 1024,
       environment: {
@@ -111,8 +111,8 @@ export class HlekkrApiGatewayStack extends cdk.Stack {
         THREAT_INTELLIGENCE_QUEUE: `https://sqs.${this.region}.amazonaws.com/${this.account}/hlekkr-${environment}-threat-intelligence`,
         REVIEW_NOTIFICATIONS_TOPIC: `arn:aws:sns:${this.region}:${this.account}:hlekkr-${environment}-review-notifications`,
         // Enhanced authentication and rate limiting
-        USER_POOL_ID: props.userPoolId,
-        USER_POOL_CLIENT_ID: props.userPoolClientId,
+        USER_POOL_ID: props.userPool.userPoolId,
+        USER_POOL_CLIENT_ID: props.userPoolClient.userPoolClientId,
         RATE_LIMIT_TABLE: `hlekkr-${environment}-rate-limits`,
         USER_PROFILES_TABLE: `hlekkr-${environment}-user-profiles`,
       },
