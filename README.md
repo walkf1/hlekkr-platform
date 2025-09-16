@@ -3,19 +3,15 @@
 # 🛡️ Hlekkr - Next-Generation Media Integrity Platform 
 **Copyright © 2025 Frthst. All rights reserved**
 
-**🏆 Code with Kiro Hackathon & Research Project - Open Source Media Verification**
+**Open Source Media Verification Platform**
 
 ⚠️ **IMPORTANT**: Deploying this platform to your own AWS account will incur costs. Please see the "Quick Start" section for details on running in the free, zero-cost **Demo Mode**.
 
 Hlekkr revolutionizes media verification through cutting-edge AI analysis, intelligent human-in-the-loop workflows, and immutable audit trails. Our platform combines Amazon Bedrock's advanced foundation models with innovative human expertise integration to deliver unparalleled media authenticity verification.
 
-## About This Repository (Code with Kiro Hackathon Submission)
+## About This Repository
 
-This repository contains the source code for the "Hlekkr" platform, submitted for the 2025 Code with Kiro Hackathon.
-
-The project's narrative involved the complete, spec-driven transformation of a legacy project called 'G.R.A.C.E.' into the modern Hlekkr platform, using Kiro as an AI development partner. This repository represents the final, A-grade MVP that was produced through this agentic workflow.
-
-The original, pre-transformation 'G.R.A.C.E.' repository can be viewed for historical context here: `https://github.com/walkf1/GRACE`
+Hlekkr is an advanced media verification platform that combines AI-powered analysis with human expertise to detect deepfakes and verify media authenticity. Built with modern cloud-native architecture, it provides enterprise-grade security and scalability for media integrity verification.
 
 ## ✨ Key Features & Capabilities
 
