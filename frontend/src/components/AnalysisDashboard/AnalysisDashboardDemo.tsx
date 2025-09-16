@@ -213,10 +213,10 @@ export const AnalysisDashboardDemo: React.FC = () => {
     fileSize: media.fileSize,
     uploadedAt: media.uploadedAt,
     analyzedAt: new Date().toISOString(),
-    trustScore: media.trustScore,
+    trustScore: media.trustScore || 0,
     status: 'completed' as any,
     deepfakeAnalysis: {
-      probability: media.deepfakeConfidence,
+      probability: media.deepfakeConfidence || 0,
       confidence: 0.9,
       techniques: media.bedrockAnalysis?.claudeSonnet?.techniques || [],
       modelVersion: 'v3.0.0'
@@ -224,7 +224,8 @@ export const AnalysisDashboardDemo: React.FC = () => {
     sourceVerification: {
       status: 'verified' as any,
       reputationScore: 85,
-      domain: 'user-upload'
+      domain: 'user-upload',
+      verificationDetails: {}
     },
     metadataAnalysis: {
       consistent: true,

@@ -4,9 +4,30 @@ import * as cdk from 'aws-cdk-lib';
 import { HlekkrOrgStack } from '../lib/hlekkr-org-stack';
 import { HlekkrMvpStack } from '../lib/hlekkr-mvp-stack';
 import { ThreatIntelligenceStack } from '../lib/threat-intelligence-stack';
+import { AuthStack } from '../lib/auth-stack';
+import { SimpleApiStack } from '../lib/simple-api-stack';
 // import { HlekkrApiStack } from '../lib/hlekkr-api-stack';
 
 const app = new cdk.App();
+
+// Create the Auth stack
+const authStack = new AuthStack(app, 'HlekkrAuthStack', {
+  env: { 
+    account: process.env.CDK_DEFAULT_ACCOUNT, 
+    region: process.env.CDK_DEFAULT_REGION 
+  },
+  environment: 'dev'
+});
+
+// Create simple API with Cognito auth
+const apiStack = new SimpleApiStack(app, 'HlekkrSimpleApiStack', {
+  env: { 
+    account: process.env.CDK_DEFAULT_ACCOUNT, 
+    region: process.env.CDK_DEFAULT_REGION 
+  },
+  userPool: authStack.userPool,
+  userPoolClient: authStack.userPoolClient
+});
 
 // Create the organization stack
 const orgStack = new HlekkrOrgStack(app, 'HlekkrOrgStack', {

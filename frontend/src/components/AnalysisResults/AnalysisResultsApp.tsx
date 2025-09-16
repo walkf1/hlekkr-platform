@@ -400,13 +400,7 @@ export const AnalysisResultsApp: React.FC<AnalysisResultsAppProps> = ({
 
       {/* Main Content */}
       {currentView === 'dashboard' ? (
-        <AnalysisResultsDashboard
-          apiBaseUrl={apiBaseUrl}
-          onMediaSelect={handleMediaSelect}
-          onBulkAction={handleBulkAction}
-          refreshInterval={30000}
-          pageSize={20}
-        />
+        <AnalysisResultsDashboard />
       ) : currentView === 'detail' && selectedMediaId ? (
         <MediaAnalysisDetailView
           mediaId={selectedMediaId}

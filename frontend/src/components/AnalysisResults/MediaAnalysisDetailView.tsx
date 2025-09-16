@@ -715,7 +715,7 @@ export const MediaAnalysisDetailView: React.FC<MediaAnalysisDetailViewProps> = (
           <MediaSubtitle>
             <span>{analysisData.fileType}</span>
             <span>{formatFileSize(analysisData.fileSize)}</span>
-            <span>Uploaded {format(new Date(analysisData.uploadedAt), 'MMM dd, yyyy HH:mm')}</span>
+            <span>Analyzed {format(new Date(analysisData.analyzedAt), 'MMM dd, yyyy HH:mm')}</span>
             <span>Media ID: {analysisData.mediaId}</span>
           </MediaSubtitle>
         </HeaderInfo>

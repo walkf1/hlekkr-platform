@@ -1,6 +1,6 @@
 # 🚀 Hlekkr Innovation Showcase
 
-## 🏆 **Award-Winning Features for Judges**
+## 🏆 **Key Platform Features**
 
 ### 1. **Human-AI Collaboration Workflow** 
 *The Heart of Our Innovation*

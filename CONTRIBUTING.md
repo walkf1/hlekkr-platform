@@ -12,7 +12,7 @@ Please Note: Kiro Hackathon Judging Period
 
 This project is currently under review for the 2025 Code with Kiro Hackathon.
 
-To ensure the integrity of our submission and to provide a stable codebase for the judges, we will be temporarily pausing the merge of any external pull requests until the judging period is complete (21 October 2025).
+To ensure platform stability, we will be temporarily pausing the merge of external pull requests during our initial release period.
 
 We still encourage you to open issues, report bugs, and suggest features. We will actively review them and will resume merging community contributions after the hackathon. Thank you for your understanding.
 ### Types of Contributions

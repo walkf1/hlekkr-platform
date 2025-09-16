@@ -328,7 +328,7 @@ export const ConnectedAnalysisDashboard: React.FC = () => {
           <option value="all">All Trust Scores</option>
           <option value="high">High (70%+)</option>
           <option value="medium">Medium (40-69%)</option>
-          <option value="low">Low (<40%)</option>
+          <option value="low">Low (&lt;40%)</option>
         </FilterSelect>
       </FiltersBar>
 
@@ -342,11 +342,9 @@ export const ConnectedAnalysisDashboard: React.FC = () => {
             <MediaCard key={media.mediaId}>
               <MediaHeader>
                 <MediaTitle>{media.fileName}</MediaTitle>
-                {media.trustScore !== undefined && (
-                  <TrustScore score={media.trustScore}>
-                    {media.trustScore}%
-                  </TrustScore>
-                )}
+                <TrustScore score={media.trustScore || 0}>
+                  {media.trustScore || 0}%
+                </TrustScore>
               </MediaHeader>
 
               <MediaInfo>

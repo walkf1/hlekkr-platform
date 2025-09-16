@@ -20,7 +20,7 @@ export const useMediaUpload = () => {
       location: result.location || '',
       status: 'processing',
       trustScore: fileType.startsWith('image/') ? 85 : 32,
-      deepfakeConfidence: fileType.startsWith('image/') ? 0.15 : 0.75
+      deepfakeConfidence: fileType.startsWith('image/') ? 0.15 : 0.75,
       analysisStatus: 'completed',
       securityScan: { status: 'completed', result: 'clean' },
       metadataExtraction: { status: 'completed' },

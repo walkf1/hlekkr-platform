@@ -103,7 +103,7 @@ export class HlekkrOrgStack extends cdk.Stack {
 
     const deepfakeDetectorFunction = new lambda.Function(this, 'HlekkrOrgDeepfakeDetector', {
       functionName: `${orgPrefix}-deepfake-${this.account}-${this.region}`,
-      runtime: lambda.Runtime.PYTHON_3_12,
+      runtime: lambda.Runtime.PYTHON_3_9,
       handler: 'index.handler',
       code: lambda.Code.fromAsset('lambda/deepfake_detector'),
       timeout: cdk.Duration.minutes(15),

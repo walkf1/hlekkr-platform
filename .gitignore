@@ -90,3 +90,8 @@ infrastructure/*.d.ts
 
 # DynamoDB Local files
 .dynamodb/
+
+# Development artifacts (keep local, exclude from repo)
+.kiro/# CDK build outputs (SECURITY: Contains infrastructure templates and account IDs)
+infrastructure/cdk.out/
+infrastructure/dist/
