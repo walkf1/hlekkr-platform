@@ -8,13 +8,11 @@ Hlekkr is dedicated to combating misinformation through advanced deepfake detect
 
 ## 🤝 How to Contribute
 
-Please Note: Kiro Hackathon Judging Period
-
-This project is currently under review for the 2025 Code with Kiro Hackathon.
+Please Note: Initial Release Period
 
 To ensure platform stability, we will be temporarily pausing the merge of external pull requests during our initial release period.
 
-We still encourage you to open issues, report bugs, and suggest features. We will actively review them and will resume merging community contributions after the hackathon. Thank you for your understanding.
+We still encourage you to open issues, report bugs, and suggest features. We will actively review them and will resume merging community contributions soon. Thank you for your understanding.
 ### Types of Contributions
 
 We welcome various types of contributions:
